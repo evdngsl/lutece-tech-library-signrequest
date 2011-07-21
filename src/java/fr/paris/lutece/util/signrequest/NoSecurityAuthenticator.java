@@ -31,23 +31,24 @@
  *
  * License 1.0
  */
-
 package fr.paris.lutece.util.signrequest;
 
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.httpclient.HttpMethodBase;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * No security request authenticator
  */
 public class NoSecurityAuthenticator implements RequestAuthenticator
 {
-
     /**
      * {@inheritDoc }
      */
-    public boolean isRequestAuthenticated(HttpServletRequest request)
+    public boolean isRequestAuthenticated( HttpServletRequest request )
     {
         return true;
     }
@@ -59,5 +60,4 @@ public class NoSecurityAuthenticator implements RequestAuthenticator
     {
         // Do nothing;
     }
-    
 }

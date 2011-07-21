@@ -33,9 +33,12 @@
  */
 package fr.paris.lutece.util.signrequest;
 
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.httpclient.HttpMethodBase;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * Request Authenticator Interface
@@ -48,13 +51,12 @@ public interface RequestAuthenticator
      * @param request The HTTP request
      * @return true if authenticated, otherwise false
      */
-    boolean isRequestAuthenticated(HttpServletRequest request);
-    
+    boolean isRequestAuthenticated( HttpServletRequest request );
+
     /**
      * Authenticate a request
      * @param method The HTTP method to authenticate
      * @param elements List of elements to include in the signature
      */
-    void authenticateRequest( HttpMethodBase method , List<String> elements );
-    
+    void authenticateRequest( HttpMethodBase method, List<String> elements );
 }

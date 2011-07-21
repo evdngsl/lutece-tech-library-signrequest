@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.util.signrequest.security;
 
+
 /**
  * HashService
  */
@@ -43,5 +44,5 @@ public interface HashService
      * @param strSource The source
      * @return The Hash
      */
-     String getHash( String strSource );
+    String getHash( String strSource );
 }

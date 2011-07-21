@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2008, Mairie de Paris
+ * Copyright (c) 2002-2011, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,10 +33,13 @@
  */
 package fr.paris.lutece.util.signrequest.security;
 
+import org.apache.log4j.Logger;
+
 import java.io.UnsupportedEncodingException;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import org.apache.log4j.Logger;
+
 
 /**
  * Sha1HashService
@@ -44,7 +47,7 @@ import org.apache.log4j.Logger;
 public class Sha1HashService implements HashService
 {
     private static final String HEX_DIGITS = "0123456789abcdef";
-    private static Logger _logger = Logger.getLogger("lutece.security");
+    private static Logger _logger = Logger.getLogger( "lutece.security.signrequest" );
 
     /**
      * {@inheritDoc }
@@ -52,39 +55,43 @@ public class Sha1HashService implements HashService
     public String getHash( String strSource )
     {
         MessageDigest md1 = null;
-        try
-        {
-            md1 = MessageDigest.getInstance("SHA-1");
-        } catch (NoSuchAlgorithmException e)
-        {
-            _logger.error( "Error creating hash " + e.getMessage(), e);
-        }
-        try
-        {
-            md1.update(strSource.getBytes("UTF-8"));
 
-        } catch (UnsupportedEncodingException e)
+        try
         {
-            _logger.error( "Error creating hash " + e.getMessage(), e);
+            md1 = MessageDigest.getInstance( "SHA-1" );
         }
-        return hex(md1.digest());
+        catch ( NoSuchAlgorithmException e )
+        {
+            _logger.error( "Error creating hash " + e.getMessage(  ), e );
+        }
+
+        try
+        {
+            md1.update( strSource.getBytes( "UTF-8" ) );
+        }
+        catch ( UnsupportedEncodingException e )
+        {
+            _logger.error( "Error creating hash " + e.getMessage(  ), e );
+        }
+
+        return hex( md1.digest(  ) );
     }
 
     /**
      * Convert bytes into an hexadecimal string
      * @param bytes Array of bytes
-     * @return An Hexadecimal string 
+     * @return An Hexadecimal string
      */
-    private static String hex(byte[] bytes)
+    private static String hex( byte[] bytes )
     {
-        StringBuilder sb = new StringBuilder(bytes.length * 2);
-        for (int i = 0; i < bytes.length; i++)
+        StringBuilder sb = new StringBuilder( bytes.length * 2 );
+
+        for ( int i = 0; i < bytes.length; i++ )
         {
             int b = bytes[i] & 0xFF;
-            sb.append(HEX_DIGITS.charAt(b >>> 4)).append(HEX_DIGITS.charAt(b & 0xF));
+            sb.append( HEX_DIGITS.charAt( b >>> 4 ) ).append( HEX_DIGITS.charAt( b & 0xF ) );
         }
-        return sb.toString();
+
+        return sb.toString(  );
     }
 }
- 
-
