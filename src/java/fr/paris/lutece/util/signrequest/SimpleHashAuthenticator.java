@@ -90,7 +90,7 @@ public class SimpleHashAuthenticator implements RequestAuthenticator
     /**
      * Sets validity time period (in seconds) between the timestamp in the request
      * and the server timestamp
-     * @param lPeriod
+     * @param lPeriod The validity time period
      */
     public void setValidityTimePeriod( long lPeriod )
     {
@@ -111,8 +111,9 @@ public class SimpleHashAuthenticator implements RequestAuthenticator
             return false;
         }
 
-        if ( isValidTimestamp( strTimestamp ) )
+        if ( !isValidTimestamp( strTimestamp ) )
         {
+            return false;
         }
 
         List<String> listElements = new ArrayList<String>(  );
@@ -149,6 +150,7 @@ public class SimpleHashAuthenticator implements RequestAuthenticator
     /**
      * Create a signature
      * @param listElements The list of elements that part of the hash
+     * @param strTimestamp The timestamp
      * @return A signature as an Hexadecimal Hash
      */
     public String buildSignature( List<String> listElements, String strTimestamp )

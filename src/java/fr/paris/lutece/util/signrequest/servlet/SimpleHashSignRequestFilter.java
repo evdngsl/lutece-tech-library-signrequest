@@ -35,10 +35,13 @@ package fr.paris.lutece.util.signrequest.servlet;
 
 import fr.paris.lutece.util.signrequest.SimpleHashAuthenticator;
 import fr.paris.lutece.util.signrequest.security.Sha1HashService;
+
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -47,6 +50,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 
 /**
  * SimpleHash Sign Request Filter
@@ -57,57 +61,58 @@ public class SimpleHashSignRequestFilter implements Filter
     private static final String PARAMETER_ELEMENTS_SIGNATURE = "elementsSignature";
     private static final String PARAMETER_VALIDITY_PERIOD = "validityTimePeriod";
     private SimpleHashAuthenticator _authenticator;
-   
-    
+
     /**
      * {@inheritDoc }
      */
     public void init( FilterConfig filterConfig ) throws ServletException
     {
-        _authenticator = new SimpleHashAuthenticator();
-        
+        _authenticator = new SimpleHashAuthenticator(  );
+
         // Set the Hashing service
-        _authenticator.setHashService( new Sha1HashService() );
-        
+        _authenticator.setHashService( new Sha1HashService(  ) );
+
         // Set the shared secret between client and server
-        String strPrivateKey = filterConfig.getInitParameter( PARAMETER_PRIVATE_KEY);
+        String strPrivateKey = filterConfig.getInitParameter( PARAMETER_PRIVATE_KEY );
         _authenticator.setPrivateKey( strPrivateKey );
-        
+
         // Set the list of elements that compose the signature
         String strElementsList = filterConfig.getInitParameter( PARAMETER_ELEMENTS_SIGNATURE );
-        StringTokenizer st = new StringTokenizer( strElementsList , "," );
-        List<String> listElements = new ArrayList<String>();
-        while( st.hasMoreTokens() )
+        StringTokenizer st = new StringTokenizer( strElementsList, "," );
+        List<String> listElements = new ArrayList<String>(  );
+
+        while ( st.hasMoreTokens(  ) )
         {
-            listElements.add( st.nextToken().trim() );
+            listElements.add( st.nextToken(  ).trim(  ) );
         }
-        _authenticator.setSignatureElements( listElements );                
-         
+
+        _authenticator.setSignatureElements( listElements );
+
         // Sets The validity Time Period
         String strValidityTimePeriod = filterConfig.getInitParameter( PARAMETER_VALIDITY_PERIOD );
         _authenticator.setValidityTimePeriod( Long.parseLong( strValidityTimePeriod ) );
-        
     }
 
     /**
      * {@inheritDoc }
      */
-    public void doFilter( ServletRequest request, ServletResponse response, FilterChain chain ) throws IOException, ServletException
+    public void doFilter( ServletRequest request, ServletResponse response, FilterChain chain )
+        throws IOException, ServletException
     {
-        if (_authenticator.isRequestAuthenticated( (HttpServletRequest) request ) )
+        if ( _authenticator.isRequestAuthenticated( (HttpServletRequest) request ) )
         {
             chain.doFilter( request, response );
-        } else
+        }
+        else
         {
-            ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            ( (HttpServletResponse) response ).setStatus( HttpServletResponse.SC_UNAUTHORIZED );
         }
     }
 
     /**
      * {@inheritDoc }
      */
-    public void destroy()
+    public void destroy(  )
     {
     }
-    
 }
