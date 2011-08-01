@@ -33,7 +33,7 @@
  */
 package fr.paris.lutece.util.signrequest.servlet;
 
-import fr.paris.lutece.util.signrequest.SimpleHashAuthenticator;
+import fr.paris.lutece.util.signrequest.HeaderHashAuthenticator;
 import fr.paris.lutece.util.signrequest.security.Sha1HashService;
 
 import java.io.IOException;
@@ -60,14 +60,14 @@ public class SimpleHashSignRequestFilter implements Filter
     private static final String PARAMETER_PRIVATE_KEY = "privateKey";
     private static final String PARAMETER_ELEMENTS_SIGNATURE = "elementsSignature";
     private static final String PARAMETER_VALIDITY_PERIOD = "validityTimePeriod";
-    private SimpleHashAuthenticator _authenticator;
+    private HeaderHashAuthenticator _authenticator;
 
     /**
      * {@inheritDoc }
      */
     public void init( FilterConfig filterConfig ) throws ServletException
     {
-        _authenticator = new SimpleHashAuthenticator(  );
+        _authenticator = new HeaderHashAuthenticator(  );
 
         // Set the Hashing service
         _authenticator.setHashService( new Sha1HashService(  ) );

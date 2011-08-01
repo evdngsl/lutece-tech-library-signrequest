@@ -33,12 +33,8 @@
  */
 package fr.paris.lutece.util.signrequest;
 
-import fr.paris.lutece.util.signrequest.security.HashService;
-
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethodBase;
-
-import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,54 +44,12 @@ import javax.servlet.http.HttpServletRequest;
 
 
 /**
- * SimpleHashAuthenticator
+ * HeaderHashAuthenticator
  */
-public class SimpleHashAuthenticator implements RequestAuthenticator
+public class HeaderHashAuthenticator extends AbstractAuthenticator implements RequestAuthenticator
 {
     private static final String HEADER_SIGNATURE = "Lutece Request Signature";
     private static final String HEADER_TIMESTAMP = "Lutece Request Timestamp";
-    private static Logger _logger = Logger.getLogger( "lutece.security.signrequest" );
-    private static HashService _serviceHash;
-    private List<String> _listSignatureElements;
-    private String _strPrivateKey;
-    private long _lValidityTimePeriod;
-
-    /**
-     * Sets the list of signature elements
-     * @param list The list
-     */
-    public void setSignatureElements( List<String> list )
-    {
-        _listSignatureElements = list;
-    }
-
-    /**
-     * Sets the Hash service
-     * @param service The Hash service
-     */
-    public void setHashService( HashService service )
-    {
-        _serviceHash = service;
-    }
-
-    /**
-     * Sets the private key
-     * @param strKey The private key
-     */
-    public void setPrivateKey( String strKey )
-    {
-        _strPrivateKey = strKey;
-    }
-
-    /**
-     * Sets validity time period (in seconds) between the timestamp in the request
-     * and the server timestamp
-     * @param lPeriod The validity time period
-     */
-    public void setValidityTimePeriod( long lPeriod )
-    {
-        _lValidityTimePeriod = lPeriod;
-    }
 
     /**
      * {@inheritDoc }
@@ -108,17 +62,21 @@ public class SimpleHashAuthenticator implements RequestAuthenticator
         // no signature or timestamp
         if ( ( strHash1 == null ) || ( strTimestamp == null ) )
         {
+            _logger.info( "SignRequest - Invalid signature" );
+
             return false;
         }
 
         if ( !isValidTimestamp( strTimestamp ) )
         {
+            _logger.info( "SignRequest - Invalid timestamp : " + strTimestamp );
+
             return false;
         }
 
         List<String> listElements = new ArrayList<String>(  );
 
-        for ( String strParameter : _listSignatureElements )
+        for ( String strParameter : getSignatureElements(  ) )
         {
             String strValue = request.getParameter( strParameter );
 
@@ -145,61 +103,5 @@ public class SimpleHashAuthenticator implements RequestAuthenticator
         String strSignature = buildSignature( elements, strTimestamp );
         header = new Header( HEADER_SIGNATURE, strSignature );
         method.setRequestHeader( header );
-    }
-
-    /**
-     * Create a signature
-     * @param listElements The list of elements that part of the hash
-     * @param strTimestamp The timestamp
-     * @return A signature as an Hexadecimal Hash
-     */
-    public String buildSignature( List<String> listElements, String strTimestamp )
-    {
-        StringBuilder sb = new StringBuilder(  );
-
-        for ( String strElement : listElements )
-        {
-            sb.append( strElement );
-        }
-
-        sb.append( _strPrivateKey );
-        sb.append( strTimestamp );
-
-        return _serviceHash.getHash( sb.toString(  ) );
-    }
-
-    /**
-     * This method checks the date of the request
-     * @param strTimestamp The timestamp
-     * @return true if the timestamp is valid, otherwise false
-     */
-    protected boolean isValidTimestamp( String strTimestamp )
-    {
-        if ( _lValidityTimePeriod != 0L )
-        {
-            try
-            {
-                long lTimeRequest = Long.parseLong( strTimestamp );
-                long lTimeCurrent = new Date(  ).getTime(  );
-                boolean bValid = ( ( ( lTimeCurrent - lTimeRequest ) / 1000L ) < _lValidityTimePeriod );
-
-                if ( !bValid )
-                {
-                    _logger.info( "SignRequest - Timestamp expired : " + strTimestamp );
-                }
-
-                return bValid;
-            }
-            catch ( NumberFormatException e )
-            {
-                // Invalid Timestamp
-                _logger.error( "SignRequest - Invalid timestamp : " + strTimestamp );
-
-                return false;
-            }
-        }
-
-        // Period = 0 no check
-        return true;
     }
 }
