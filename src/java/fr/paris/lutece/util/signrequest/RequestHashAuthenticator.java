@@ -38,6 +38,7 @@ import org.apache.commons.httpclient.HttpMethodBase;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -103,5 +104,41 @@ public class RequestHashAuthenticator extends AbstractAuthenticator implements R
         strQueryString += ( "&" + PARAMETER_SIGNATURE + "=" + strSignature );
 
         method.setQueryString( strQueryString );
+    }
+
+    public String addExtrasUrlParameters( String url, List<String> elements )
+    {
+        StringBuilder sbExtrasParameters = new StringBuilder(  );
+
+        if ( url.contains( "=" ) )
+        {
+            sbExtrasParameters.append( url ).append( "&" );
+        }
+        else
+        {
+            sbExtrasParameters.append( url ).append( "?" );
+        }
+
+        String strTimestamp = "" + new Date(  ).getTime(  );
+        sbExtrasParameters.append( PARAMETER_TIMESTAMP ).append( "=" ).append( strTimestamp );
+
+        String strSignature = buildSignature( elements, strTimestamp );
+        sbExtrasParameters.append( "&" ).append( PARAMETER_SIGNATURE ).append( "=" ).append( strSignature );
+
+        return sbExtrasParameters.toString(  );
+    }
+
+    /**
+     * Add security parameters to a parameter map
+     * @param mapParameters The parameter map
+     * @param elements The element list to build the signature
+     */
+    public void addSecurityParameters( Map mapParameters, List<String> elements )
+    {
+        String strTimestamp = "" + new Date(  ).getTime(  );
+        mapParameters.put( PARAMETER_TIMESTAMP, strTimestamp );
+
+        String strSignature = buildSignature( elements, strTimestamp );
+        mapParameters.put( PARAMETER_SIGNATURE, strSignature );
     }
 }

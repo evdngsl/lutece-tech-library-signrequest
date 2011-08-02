@@ -108,9 +108,12 @@ public abstract class AbstractAuthenticator implements RequestAuthenticator
     {
         StringBuilder sb = new StringBuilder(  );
 
-        for ( String strElement : listElements )
+        if ( listElements != null )
         {
-            sb.append( strElement );
+            for ( String strElement : listElements )
+            {
+                sb.append( strElement );
+            }
         }
 
         sb.append( _strPrivateKey );
