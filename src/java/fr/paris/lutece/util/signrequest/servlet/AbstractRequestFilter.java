@@ -33,7 +33,7 @@
  */
 package fr.paris.lutece.util.signrequest.servlet;
 
-import fr.paris.lutece.util.signrequest.HeaderHashAuthenticator;
+import fr.paris.lutece.util.signrequest.AbstractAuthenticator;
 import fr.paris.lutece.util.signrequest.security.Sha1HashService;
 
 import java.io.IOException;
@@ -55,19 +55,25 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * SimpleHash Sign Request Filter
  */
-public class SimpleHashSignRequestFilter implements Filter
+public abstract class AbstractRequestFilter implements Filter
 {
     private static final String PARAMETER_PRIVATE_KEY = "privateKey";
     private static final String PARAMETER_ELEMENTS_SIGNATURE = "elementsSignature";
     private static final String PARAMETER_VALIDITY_PERIOD = "validityTimePeriod";
-    private HeaderHashAuthenticator _authenticator;
+    private AbstractAuthenticator _authenticator;
+
+    /**
+     * The implementation should provide the authenticator to use
+     * @return The authenticator to be used by the filter
+     */
+    protected abstract AbstractAuthenticator getAuthenticator(  );
 
     /**
      * {@inheritDoc }
      */
     public void init( FilterConfig filterConfig ) throws ServletException
     {
-        _authenticator = new HeaderHashAuthenticator(  );
+        _authenticator = getAuthenticator(  );
 
         // Set the Hashing service
         _authenticator.setHashService( new Sha1HashService(  ) );
