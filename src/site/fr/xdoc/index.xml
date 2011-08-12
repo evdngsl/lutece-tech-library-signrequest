@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <properties>
+        <title>Librairie SignRequest </title>
+    </properties>
+    <body>
+        <section name="Bibliothèque SignRequest">
+            <subsection name="Introduction">
+                <p>
+                    L'objet de cette bibliothèque est d'offrir un certain nombre d'outils et d'interfaces
+                    pour transmettre avec les requêtes HTTP des signatures numériques afin de garantir
+                    un certain niveau de sécurité.
+                </p>
+            </subsection>
+            <subsection name="Sécurité apportée par une signature">
+                <p>
+                    La sécurité apportée par une signature associée àune requete HTTP est très utile notamment
+                    dans le cadre de webservice REST où il n'y a pas de notion de session ( Mode stateless - sans état).
+                </p>
+                <p>
+                    Le principe de la signature est de réaliser coté client un condensat (hash) d'un certain d'éléments 
+                    variables de la requête (paramètres), d'un timestamp (pour limiter la validité de la signature dans le temps)
+                    et d'une clé secrète (connue que du client et du serveur). 
+                    Ce condensat est obtenu à l'aide d'un algorithme de hashage (SHA-1, SHA-256, ...) et constitue 
+                    la signature proprement dite de la requête. Elle se présente sous la forme d'une chaîne de caractères
+                    représentant un nombre sous forme héxadécimale.
+                </p>
+                <p>
+                    La signature est transmise au serveur, qui devra reconstituer un condensat de son coté avec sa clé secrète.
+                    Si la signature est correctement reconstituée, la requête est valide, sinon elle refusée avec un code retour HTTP 401.
+                </p>
+                <p>
+                    Voici ce que la signature apporte en terme de sécurité :
+                    <ul>
+                        <li>
+                            Une requête HTTP ou un appel de WebService ne peut être exécuté par un
+                            client qui ne possède pas la clé secrète
+                        </li>
+                        <li>
+                            Si l'option de contrôle du Timestamp est activée, la requête aura une durée de vie
+                            limitée dans le temps. Il ne sera pas possible de rejouer la requête dans ce délai.
+                        </li>
+                        <li>
+                            Valider l'intégrité des paramètres transmis (si ils font partie de la signature).
+                        </li>
+                    </ul>
+                </p>
+                <p>
+                    Voici ce que la signature n'apporte pas en terme de sécurité :
+                    <ul>
+                        <li>
+                            La confidentialité des données transmises. Celle-ci peut être obtenue
+                            par cryptage de la transmission par HTTPS
+                        </li>
+                        <li>
+                            La possibilité de rejouer exactementla même requête dans un temps limité.
+                        </li>
+                        <li>
+                            La signature simple n'est pas liée à un utilisateur donc ne permet pas la
+                            gestion de droits d'accès. Pour valider une signature par utilisateur, il est 
+                            nécessaire de s'appuyer sur un serveur d'identités (Identity Provider) 
+                            faisant appel à des protocoles tels que OAuth.
+                        </li>
+                    </ul>
+                </p>
+                <p>
+                    En résumé, la sécurité offerte par ce mécanisme de signature correspond bien à 
+                    un besoin de fonctionnement sans session typiquement les Webservices REST.
+                    Il convient bien à la sécurisation de requêtes entre deux serveurs où provenant 
+                    d'une population très faible d'utilisateurs (confidentialité du secret partagé) ou
+                    n'ayant pas accès à la clé secrète.
+                </p>
+                <p>
+                    Afin d'assurer la confidentialité des données, le transfert des données doit être 
+                    réalisé en HTTPS.
+                </p>
+            </subsection>
+            </section>
+            <section name="Outils apportés par SignRequest">
+                <subsection name="API  RequestAuthenticator">
+                    <p>
+                         L'API <code>RequestAuthenticator</code> : définit un 
+                         authentificateur de requete HTTP. 
+                    </p>
+                    <p>
+                         Le même composant peut être utilisé coté client pour signer une requête et
+                         coté serveur pour valider l'authentification.
+                         Voici l'interface et ses deux méthodes à implémenter :
+                    </p>
+                    <p>
+                    <div class="code">
+                    <pre>
+    /**
+     * Check the Authentication of a request
+     * @param request The HTTP request
+     * @return true if authenticated, otherwise false
+     */
+    boolean <strong>isRequestAuthenticated</strong>( HttpServletRequest request );
+
+    /**
+     * Authenticate a request
+     * @param method The HTTP method to authenticate
+     * @param elements List of elements to include in the signature
+     */
+    void <strong>authenticateRequest</strong>( HttpMethodBase method, List&lt;String&gt; elements );
+                        
+                    </pre>    
+                    </div>    
+                    </p>
+                    <p>
+                        Cette interface offre de nombreuses possibilités d'implémentations. 
+                        Une bonne pratique consiste à injecter via un contexte Spring l'implémentation 
+                        souhaitée.<br />
+                        La bibliothèque SignRequest propose plusieurs implémentations :
+                     </p>
+                     <p>
+                        <ul>
+                            <li>NoSecurityAuthenticator : pas de contrôle de l'authentification</li>
+                            <li>HeaderHashAuthenticator : Signature passée dans un header de la requête HTTP</li>
+                            <li>RequestHashAuthenticator : Signature passée dans un header de la requête HTTP</li>
+                        </ul>
+                    </p> 
+                </subsection>
+                <subsection name="RequestHashAuthenticator et HeaderHashAuthenticator">
+                    <p>
+                        Ces authenticators doivent être configurés à l'aide de plusieurs paramètres :
+                    </p>
+                    <p>
+                        <ul>
+                            <li>le service de hachage. La librairie SignRequest fournit une API de 
+                                HashService et une implémentation utilisant l'algorithme SHA-1.</li>
+                            <li>la clé privée correspondant au secret partagé entre le client et le serveur</li>
+                            <li>la liste des paramètres de la requête qui sont utilisés pour composer la signature</li>
+                            <li>la durée de validité de la signature en secondes. La valeur 0 indique que la durée n'est pas contrôlée. </li>
+                        </ul>
+                    </p>
+                    
+
+                    <h4>Configuration d'un RequestAuthenticator dans le plugin REST</h4>
+
+                    <p>La sécurisation de l'ensemble des requêtes peut se faire au niveau du plugin REST 
+                    en injectant via le context Spring un authenticator.</p>
+                    <p>
+                        Par défaut, le plugin REST utilise l'implémentation <code>NoSecurityRequestAuthenticator</code> 
+                        qui autorise l'ensemble des requêtes. L'exemple ci-dessous montre une configuration 
+                        utilisant le HeaderHashRequestAuthenticator et son paramètrage spécifique.
+                    </p>
+
+   &lt;bean id="rest.hashService" class="fr.paris.lutece.util.signrequest.security.Sha1HashService" /&gt;
+   &lt;bean id="rest.requestAuthenticator" class="fr.paris.lutece.util.signrequest.HeaderHashAuthenticator" &gt;
+       &lt;property name="hashService" ref="rest.hashService" /&gt;
+       &lt;property name="signatureElements" &gt; 
+           &lt;list&gt;
+               &lt;value&gt;key&lt;/value&gt;
+           &lt;/list&gt;
+       &lt;/property&gt;
+       &lt;property name="privateKey"&gt;
+           &lt;value&gt;change me&lt;/value&gt;
+       &lt;/property&gt;
+       &lt;property name="validityTimePeriod"&gt;
+           &lt;value&gt;0&lt;/value&gt;
+       &lt;/property&gt;
+   &lt;/bean&gt;
+                </subsection>
+            </section>
+            <section name="API HashService">
+            <p>
+                Cette API propose une fonction de hachage dont voici l'interface :
+            </p>    
+<p>
+    <div class="code">
+        <pre>
+    /**
+     * Create a Hash string from a given source
+     * @param strSource The source
+     * @return The Hash
+     */
+    String getHash( String strSource );
+        
+        </pre>
+    </div>
+</p>
+        
+            <p>
+                La bibliothèque SignRequest propose l'implémentation SHA-1.
+            </p>
+        </section>
+        <section name="Filtres de servlet">
+            <p>
+                La bibliothèque SignRequest propose également des filtres de Servlet 
+                qui peuvent être utilisés par les plugins de manière à valider 
+                les requêtes coté serveur.<br />
+                Ils sont basés sur les authenticator fournis avec la bibliothèque.
+                <br/>
+                Voici un exemple de filtre ajouté dans le fichier XML d'un plugin :
+            </p> 
+            
+<p>
+    <div class="code">
+        <pre>
+&lt;filters&gt;
+       &lt;filter&gt;
+           &lt;filter-name&gt;myresourcesecurity&lt;/filter-name&gt;
+           &lt;url-pattern&gt;/rest/myresource/*&lt;/url-pattern&gt;
+           &lt;filter-class&gt;fr.paris.lutece.util.signrequest.servlet.HeaderHashRequestFilter&lt;/filter-class&gt;
+
+           &lt;init-param&gt;
+               &lt;param-name&gt;elementsSignature&lt;/param-name&gt;
+               &lt;param-value&gt;id-resource,name,description&lt;/param-value&gt;
+           &lt;/init-param&gt;
+
+           &lt;init-param&gt;
+               &lt;param-name&gt;validityTimePeriod&lt;/param-name&gt;
+               &lt;param-value&gt;0&lt;/param-value&gt;
+           &lt;/init-param&gt;
+
+           &lt;init-param&gt;
+               &lt;param-name&gt;privateKey&lt;/param-name&gt;
+               &lt;param-value&gt;change me&lt;/param-value&gt;
+           &lt;/init-param&gt;
+       &lt;/filter&gt;
+   &lt;/filters&gt;
+        </pre>
+    </div>
+</p>
+   </section>
+    </body>
+</document>  
