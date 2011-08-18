@@ -180,6 +180,49 @@
         </pre>
     </div>
     </p>
-            </section>
+        
+            <p>
+                The library offers SignRequest implementing SHA-1.
+            </p>
+        </section>
+        <section name="Servlet Filters">
+            <p>
+                The library also offers SignRequest Servlet filters
+                that can be used by plugins in order to validate
+                queries on the server side. <br />
+                They are based on authenticators provided with the library.
+                <br/>
+                An example of a filter added to the XML file of a plugin:
+            </p>    
+            <p>
+            <div class="code">
+        <pre>
+&lt;filters&gt;
+       &lt;filter&gt;
+           &lt;filter-name&gt;myresourcesecurity&lt;/filter-name&gt;
+           &lt;url-pattern&gt;/rest/myresource/*&lt;/url-pattern&gt;
+           &lt;filter-class&gt;fr.paris.lutece.util.signrequest.servlet.HeaderHashRequestFilter&lt;/filter-class&gt;
+
+           &lt;init-param&gt;
+               &lt;param-name&gt;elementsSignature&lt;/param-name&gt;
+               &lt;param-value&gt;id-resource,name,description&lt;/param-value&gt;
+           &lt;/init-param&gt;
+
+           &lt;init-param&gt;
+               &lt;param-name&gt;validityTimePeriod&lt;/param-name&gt;
+               &lt;param-value&gt;0&lt;/param-value&gt;
+           &lt;/init-param&gt;
+
+           &lt;init-param&gt;
+               &lt;param-name&gt;privateKey&lt;/param-name&gt;
+               &lt;param-value&gt;change me&lt;/param-value&gt;
+           &lt;/init-param&gt;
+       &lt;/filter&gt;
+   &lt;/filters&gt;
+        </pre>
+    </div>
+</p>
+   </section>
+      
         </body>
 </document>  
