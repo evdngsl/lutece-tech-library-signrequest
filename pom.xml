@@ -1,9 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
     <parent>
-        <artifactId>lutece-plugins-pom</artifactId>
-        <groupId>fr.paris.lutece.plugins</groupId>
-        <version>3.7</version>
+        <artifactId>lutece-global-pom</artifactId>
+        <groupId>fr.paris.lutece.tools</groupId>
+        <version>3.0.3</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.paris.lutece.plugins</groupId>
     <artifactId>library-signrequest</artifactId>
@@ -11,6 +13,7 @@
     <name>Library Sign Request</name>
     <packaging>jar</packaging>
     <description>Http request signing library</description>
+    
     <repositories>
   	<repository>
             <id>luteceSnapshot</id>
@@ -65,8 +68,9 @@
     </properties>
 
     <scm>
-        <connection>scm:svn:http://dev.lutece.paris.fr/svn/lutece/portal/trunk/plugins/library/library-signrequest</connection>
-        <developerConnection>scm:svn:https://dev.lutece.paris.fr/svn/lutece/portal/trunk/plugins/library/library-signrequest</developerConnection>
-        <url>http://dev.lutece.paris.fr/viewvc/lutece/portal/trunk/plugins/library/library-signrequest</url>
+        <connection>scm:git:https://github.com/lutece-platform/lutece-tech-library-signrequest.git</connection>
+        <developerConnection>scm:git:https://github.com/lutece-platform/lutece-tech-library-signrequest.git</developerConnection>
+        <url>https://github.com/lutece-platform/lutece-tech-library-signrequest.git</url>
     </scm>
+    
 </project>
