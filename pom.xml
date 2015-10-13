@@ -9,7 +9,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fr.paris.lutece.plugins</groupId>
     <artifactId>library-signrequest</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4-SNAPSHOT</version>
     <name>Library Sign Request</name>
     <packaging>jar</packaging>
     <description>Http request signing library</description>
@@ -71,7 +71,7 @@
         <connection>scm:git:https://github.com/lutece-platform/lutece-tech-library-signrequest.git</connection>
         <developerConnection>scm:git:https://github.com/lutece-platform/lutece-tech-library-signrequest.git</developerConnection>
         <url>https://github.com/lutece-platform/lutece-tech-library-signrequest.git</url>
-      <tag>lutece-tech-library-signrequest-1.0.3</tag>
+      <tag>HEAD</tag>
   </scm>
     
 </project>
