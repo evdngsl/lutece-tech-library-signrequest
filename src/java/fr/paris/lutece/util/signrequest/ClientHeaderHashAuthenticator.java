@@ -33,23 +33,51 @@
  */
 package fr.paris.lutece.util.signrequest;
 
+import static fr.paris.lutece.util.signrequest.AbstractAuthenticator._logger;
+import fr.paris.lutece.util.signrequest.service.ClientKeyService;
+import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethodBase;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 
 /**
- * RequestHashAuthenticator
+ * Client Header Hash Authenticator
  */
-public class RequestHashAuthenticator extends AbstractPrivateKeyAuthenticator implements RequestAuthenticator
+public class ClientHeaderHashAuthenticator extends AbstractAuthenticator implements RequestAuthenticator
 {
-    private static final String PARAMETER_SIGNATURE = "signature";
-    private static final String PARAMETER_TIMESTAMP = "timestamp";
+    private static final String HEADER_SIGNATURE = "Lutece Request Signature";
+    private static final String HEADER_TIMESTAMP = "Lutece Request Timestamp";
+    private static final String HEADER_CLIENT_ID = "Lutece Request ClientID";
+    
+    private String _strClientId;
+    private ClientKeyService _clientKeyService;
+
+    /**
+     * Set the client ID 
+     * This setter should be used in the Spring context file of the CLIENT to declare
+     * the client ID.
+     * @param strClientId 
+     */
+    public void setClientId( String strClientId )
+    {
+        _strClientId = strClientId;
+    }
+    
+    /**
+     * Set the clientKeyService
+     * This setter should be used in the Spring context file of the SERVER to 
+     * provide a lookup service to find keys for given client ids.
+     * @param clientKeyService 
+     */
+    public void setClientKeyService( ClientKeyService clientKeyService )
+    {
+        _clientKeyService = clientKeyService;
+    }
 
     /**
      * {@inheritDoc }
@@ -57,11 +85,13 @@ public class RequestHashAuthenticator extends AbstractPrivateKeyAuthenticator im
     @Override
     public boolean isRequestAuthenticated( HttpServletRequest request )
     {
-        String strHash1 = request.getParameter( PARAMETER_SIGNATURE );
-        String strTimestamp = request.getParameter( PARAMETER_TIMESTAMP );
+        String strHash1 = request.getHeader( HEADER_SIGNATURE );
+        String strTimestamp = request.getHeader( HEADER_TIMESTAMP );
+        String strClientId = request.getHeader( HEADER_CLIENT_ID );
+        
 
         // no signature or timestamp
-        if ( ( strHash1 == null ) || ( strTimestamp == null ) )
+        if ( ( strHash1 == null ) || ( strTimestamp == null ) || ( strClientId == null ) )
         {
             _logger.info( "SignRequest - Invalid signature" );
 
@@ -87,7 +117,8 @@ public class RequestHashAuthenticator extends AbstractPrivateKeyAuthenticator im
             }
         }
 
-        String strHash2 = buildSignature( listElements, strTimestamp, getPrivateKey() );
+        String strClientKey = _clientKeyService.getKey( strClientId );
+        String strHash2 = buildSignature( listElements, strTimestamp , strClientKey );
 
         return strHash1.equals( strHash2 );
     }
@@ -98,49 +129,16 @@ public class RequestHashAuthenticator extends AbstractPrivateKeyAuthenticator im
     @Override
     public void authenticateRequest( HttpMethodBase method, List<String> elements )
     {
-        String strQueryString = method.getQueryString(  );
         String strTimestamp = "" + new Date(  ).getTime(  );
-        strQueryString += ( "&" + PARAMETER_TIMESTAMP + "=" + strTimestamp );
+        Header header = new Header( HEADER_TIMESTAMP, strTimestamp );
+        method.setRequestHeader( header );
 
-        String strSignature = buildSignature( elements, strTimestamp, getPrivateKey() );
-        strQueryString += ( "&" + PARAMETER_SIGNATURE + "=" + strSignature );
-
-        method.setQueryString( strQueryString );
-    }
-
-    public String addExtrasUrlParameters( String url, List<String> elements )
-    {
-        StringBuilder sbExtrasParameters = new StringBuilder(  );
-
-        if ( url.contains( "=" ) )
-        {
-            sbExtrasParameters.append( url ).append( "&" );
-        }
-        else
-        {
-            sbExtrasParameters.append( url ).append( "?" );
-        }
-
-        String strTimestamp = "" + new Date(  ).getTime(  );
-        sbExtrasParameters.append( PARAMETER_TIMESTAMP ).append( "=" ).append( strTimestamp );
-
-        String strSignature = buildSignature( elements, strTimestamp, getPrivateKey() );
-        sbExtrasParameters.append( "&" ).append( PARAMETER_SIGNATURE ).append( "=" ).append( strSignature );
-
-        return sbExtrasParameters.toString(  );
-    }
-
-    /**
-     * Add security parameters to a parameter map
-     * @param mapParameters The parameter map
-     * @param elements The element list to build the signature
-     */
-    public void addSecurityParameters( Map mapParameters, List<String> elements )
-    {
-        String strTimestamp = "" + new Date(  ).getTime(  );
-        mapParameters.put( PARAMETER_TIMESTAMP, strTimestamp );
-
-        String strSignature = buildSignature( elements, strTimestamp, getPrivateKey() );
-        mapParameters.put( PARAMETER_SIGNATURE, strSignature );
+        header = new Header( HEADER_CLIENT_ID, _strClientId );
+        method.setRequestHeader( header );
+        
+        String strClientKey = _clientKeyService.getKey( _strClientId );
+        String strSignature = buildSignature( elements, strTimestamp , strClientKey );
+        header = new Header( HEADER_SIGNATURE, strSignature );
+        method.setRequestHeader( header );
     }
 }

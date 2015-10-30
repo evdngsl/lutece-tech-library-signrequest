@@ -49,7 +49,6 @@ public abstract class AbstractAuthenticator implements RequestAuthenticator
     protected static Logger _logger = Logger.getLogger( "lutece.security.signrequest" );
     private static HashService _serviceHash;
     private List<String> _listSignatureElements;
-    private String _strPrivateKey;
     private long _lValidityTimePeriod;
 
     /**
@@ -79,14 +78,6 @@ public abstract class AbstractAuthenticator implements RequestAuthenticator
         _serviceHash = service;
     }
 
-    /**
-     * Sets the private key
-     * @param strKey The private key
-     */
-    public void setPrivateKey( String strKey )
-    {
-        _strPrivateKey = strKey;
-    }
 
     /**
      * Sets validity time period (in seconds) between the timestamp in the request
@@ -104,7 +95,7 @@ public abstract class AbstractAuthenticator implements RequestAuthenticator
      * @param strTimestamp The timestamp
      * @return A signature as an Hexadecimal Hash
      */
-    public String buildSignature( List<String> listElements, String strTimestamp )
+    public String buildSignature( List<String> listElements, String strTimestamp , String strSecret )
     {
         StringBuilder sb = new StringBuilder(  );
 
@@ -116,7 +107,7 @@ public abstract class AbstractAuthenticator implements RequestAuthenticator
             }
         }
 
-        sb.append( _strPrivateKey );
+        sb.append( strSecret );
         sb.append( strTimestamp );
 
         return _serviceHash.getHash( sb.toString(  ) );

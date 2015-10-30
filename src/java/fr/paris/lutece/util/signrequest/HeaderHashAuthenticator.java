@@ -46,7 +46,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * HeaderHashAuthenticator
  */
-public class HeaderHashAuthenticator extends AbstractAuthenticator implements RequestAuthenticator
+public class HeaderHashAuthenticator extends AbstractPrivateKeyAuthenticator implements RequestAuthenticator
 {
     private static final String HEADER_SIGNATURE = "Lutece Request Signature";
     private static final String HEADER_TIMESTAMP = "Lutece Request Timestamp";
@@ -87,7 +87,7 @@ public class HeaderHashAuthenticator extends AbstractAuthenticator implements Re
             }
         }
 
-        String strHash2 = buildSignature( listElements, strTimestamp );
+        String strHash2 = buildSignature( listElements, strTimestamp, getPrivateKey() );
 
         return strHash1.equals( strHash2 );
     }
@@ -102,7 +102,7 @@ public class HeaderHashAuthenticator extends AbstractAuthenticator implements Re
         Header header = new Header( HEADER_TIMESTAMP, strTimestamp );
         method.setRequestHeader( header );
 
-        String strSignature = buildSignature( elements, strTimestamp );
+        String strSignature = buildSignature( elements, strTimestamp, getPrivateKey() );
         header = new Header( HEADER_SIGNATURE, strSignature );
         method.setRequestHeader( header );
     }

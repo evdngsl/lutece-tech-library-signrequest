@@ -34,6 +34,8 @@
 package fr.paris.lutece.util.signrequest.servlet;
 
 import fr.paris.lutece.util.signrequest.AbstractAuthenticator;
+import fr.paris.lutece.util.signrequest.AbstractPrivateKeyAuthenticator;
+import fr.paris.lutece.util.signrequest.ClientHeaderHashAuthenticator;
 import fr.paris.lutece.util.signrequest.security.Sha1HashService;
 
 import java.io.IOException;
@@ -71,6 +73,7 @@ public abstract class AbstractRequestFilter implements Filter
     /**
      * {@inheritDoc }
      */
+    @Override
     public void init( FilterConfig filterConfig ) throws ServletException
     {
         _authenticator = getAuthenticator(  );
@@ -78,9 +81,12 @@ public abstract class AbstractRequestFilter implements Filter
         // Set the Hashing service
         _authenticator.setHashService( new Sha1HashService(  ) );
 
-        // Set the shared secret between client and server
-        String strPrivateKey = filterConfig.getInitParameter( PARAMETER_PRIVATE_KEY );
-        _authenticator.setPrivateKey( strPrivateKey );
+        if( _authenticator instanceof AbstractPrivateKeyAuthenticator )
+        {
+            // Set the shared secret between client and server
+            String strPrivateKey = filterConfig.getInitParameter( PARAMETER_PRIVATE_KEY );
+            ((AbstractPrivateKeyAuthenticator) _authenticator).setPrivateKey( strPrivateKey );
+        } 
 
         // Set the list of elements that compose the signature
         String strElementsList = filterConfig.getInitParameter( PARAMETER_ELEMENTS_SIGNATURE );
@@ -102,6 +108,7 @@ public abstract class AbstractRequestFilter implements Filter
     /**
      * {@inheritDoc }
      */
+    @Override
     public void doFilter( ServletRequest request, ServletResponse response, FilterChain chain )
         throws IOException, ServletException
     {
@@ -118,6 +125,7 @@ public abstract class AbstractRequestFilter implements Filter
     /**
      * {@inheritDoc }
      */
+    @Override
     public void destroy(  )
     {
     }
