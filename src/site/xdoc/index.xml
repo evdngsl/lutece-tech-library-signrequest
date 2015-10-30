@@ -1,15 +1,15 @@
 <document> 
-<properties> 
-    <title> SignRequest Library</title> 
-</properties> 
-     <body> 
-         <section name="Library SignRequest"> 
+    <properties> 
+        <title> SignRequest Library</title> 
+    </properties> 
+    <body> 
+        <section name="Library SignRequest"> 
             <subsection name="Introduction"> 
-            <p>
+                <p>
                     The purpose of this library is to provide a number of tools and interfaces
                     to send HTTP requests with digital signatures to ensure
                     a certain level of security.
-            </p> 
+                </p> 
             </subsection> 
             <subsection name="Sécurité provided by a signature"> 
                 <p>
@@ -27,8 +27,8 @@
                 <p>
                     The signature is transmitted to the server, which will restore a condensate on its side with its secret key.
                     If the signature is properly restored, the request is valid, otherwise she refused with a 401 HTTP status code.
-                <p>
-                </p>
+                    <p>
+                    </p>
                     This is what brings the signature in terms of safety:
                     <ul>
                         <li>
@@ -43,11 +43,11 @@
                             Validate the integrity of parameters passed (if they are part of the signature).
                         </li>
                     </ul> 
-                 </p>
-                 <p>
+                </p>
+                <p>
                     Here's what the signature does not in terms of safety:
-                 </p>
-                 <p>
+                </p>
+                <p>
                     <ul>   
                         <li>
                             The confidentiality of data transmitted. This can be achieved
@@ -62,7 +62,7 @@
                             necessary to rely on a server identity (Identity Provider)
                             using protocols like OAuth.
                         </li>
-                     </ul>
+                    </ul>
                 </p>
                 <p>
                     In summary, the security offered by the signature mechanism corresponds to
@@ -77,35 +77,37 @@
                 </p> 
             </subsection> 
         </section> 
-        <section name="Outils provided by SignRequest"> 
+        <section name="Tools provided by SignRequest"> 
             <subsection name="API RequestAuthenticator"> 
-                    <p>
-                         API <code> RequestAuthenticator </code>: defines a
-                         Authenticator HTTP request.
-                    </p>
-                    <p>
-                         The same component can be used client side to sign a petition and
-                         server side to validate authentication.
-                         Here is the interface and two methods to implement:
-                    </p> 
-                    <p>
-                        <div class="code">
-                            <pre>
-    / **
-     * Check the Authentication of a request
-     * @ Param request The HTTP request
-     * @ Return true if authenticated, false Otherwise
-     * /
-    boolean <strong> isRequestAuthenticated </strong> (HttpServletRequest request);
+                <p>
+                    API <code> RequestAuthenticator </code>: defines a
+                    Authenticator HTTP request.
+                </p>
+                <p>
+                    The same component can be used client side to sign a petition and
+                    server side to validate authentication.
+                    Here is the interface and two methods to implement:
+                </p> 
+                <p>
+                    <div class="code">
+                        <pre>
+                            / **
+                            * Check the Authentication of a request
+                            * @ Param request The HTTP request
+                            * @ Return true if authenticated, false Otherwise
+                            * /
+                            boolean <strong> isRequestAuthenticated </strong> (HttpServletRequest request);
 
-    / **
-     * Authenticate a request
-     * @ Param method The HTTP method to authenticate
-     * @ Param elements List of elements to include in the signature
-     * /
-    <strong> AuthenticateRequest void </strong> (HttpMethodBase method, &lt;String&gt; List elements);
+                            / **
+                            * Authenticate a request
+                            * @ Param method The HTTP method to authenticate
+                            * @ Param elements List of elements to include in the signature
+                            * /
+                            <strong> AuthenticateRequest void </strong> (HttpMethodBase method, &lt;String&gt; List elements);
                         
-</pre> </div> </p>
+                        </pre> 
+                    </div> 
+                </p>
                 <p>
                     This interface offers many implementations.
                     A good practice is to inject a Spring context via the implementation
@@ -127,21 +129,21 @@
                 <p>
                     <ul>
                         <li> service hash. The library provides an API SignRequest
-                                HashService and an implementation using the SHA-1. </li> 
+                            HashService and an implementation using the SHA-1. </li> 
                         <li>the private key corresponding to the shared secret between client and server </li>
                         <li>list of query parameters that are used to compose the signature </li> 
                         <li>the validity of the signature in seconds. The value 0 indicates that the duration is not controlled. </li> 
                     </ul> 
-               </p> 
-               <h4> Configuring a RequestAuthenticator in the REST plugin </h4> 
-                    <p> Securing all requests can be made at the REST plugin
-                        by injecting a Spring context via the authenticator. 
-                    </p>
-                    <p>
-                        By default the plugin uses REST implementation <code> NoSecurityRequestAuthenticator </code>
-                        which allows all queries. The example below shows a configuration
-                        HeaderHashRequestAuthenticator using the setup and specific.
-                    </p>
+                </p> 
+                <h4> Configuring a RequestAuthenticator in the REST plugin </h4> 
+                <p> Securing all requests can be made at the REST plugin
+                    by injecting a Spring context via the authenticator. 
+                </p>
+                <p>
+                    By default the plugin uses REST implementation <code> NoSecurityRequestAuthenticator </code>
+                    which allows all queries. The example below shows a configuration
+                    HeaderHashRequestAuthenticator using the setup and specific.
+                </p>
 
     &lt;bean id="rest.hashService" class="fr.paris.lutece.util.signrequest.security.Sha1HashService" /&gt;
    &lt;bean id="rest.requestAuthenticator" class="fr.paris.lutece.util.signrequest.HeaderHashAuthenticator" &gt;
@@ -158,28 +160,28 @@
            &lt;value&gt;0&lt;/value&gt;
        &lt;/property&gt;
    &lt;/bean&gt;
-                </subsection>
-            </section>
-            <section name="API HashService">
+            </subsection>
+        </section>
+        <section name="API HashService">
             <p>
                 Cette API propose une fonction de hachage 
             </p>    
             <p>
                 Voici l'interface
             </p>
-<p>
-    <div class="code">
-        <pre>
-    /**
-     * Create a Hash string from a given source
-     * @param strSource The source
-     * @return The Hash
-     */
-    String getHash( String strSource );
+            <p>
+                <div class="code">
+                    <pre>
+                        /**
+                        * Create a Hash string from a given source
+                        * @param strSource The source
+                        * @return The Hash
+                        */
+                        String getHash( String strSource );
         
-        </pre>
-    </div>
-    </p>
+                    </pre>
+                </div>
+            </p>
         
             <p>
                 The library offers SignRequest implementing SHA-1.
@@ -195,8 +197,8 @@
                 An example of a filter added to the XML file of a plugin:
             </p>    
             <p>
-            <div class="code">
-        <pre>
+                <div class="code">
+                    <pre>
 &lt;filters&gt;
        &lt;filter&gt;
            &lt;filter-name&gt;myresourcesecurity&lt;/filter-name&gt;
@@ -219,10 +221,10 @@
            &lt;/init-param&gt;
        &lt;/filter&gt;
    &lt;/filters&gt;
-        </pre>
-    </div>
-</p>
-   </section>
+                    </pre>
+                </div>
+            </p>
+        </section>
       
-        </body>
+    </body>
 </document>  
