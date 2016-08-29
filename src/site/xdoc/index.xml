@@ -11,7 +11,7 @@
                     a certain level of security.
                 </p> 
             </subsection> 
-            <subsection name="Sécurité provided by a signature"> 
+            <subsection name="Security provided by a signature"> 
                 <p>
                     The security provided by a signature associated OF a HTTP request is very useful
                     in the context of REST webservice where there is no concept of session (stateless mode - without state).
