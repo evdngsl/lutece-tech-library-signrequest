@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.util.signrequest;
 
-
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.commons.codec.binary.Base64;
@@ -44,8 +43,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * BasicAuthorizationAuthenticator.<br>
  * This authenticator provides a basic username/password authentication.<br>
- * The request should have a header named Authorization with a value that begins
- * with "Basic" followed by the "username:password" encoded in base64.
+ * The request should have a header named Authorization with a value that begins with "Basic" followed by the "username:password" encoded in base64.
  */
 public class BasicAuthorizationAuthenticator extends AbstractAuthenticator
 {
@@ -58,8 +56,10 @@ public class BasicAuthorizationAuthenticator extends AbstractAuthenticator
     /**
      * Constructor that define credentials
      *
-     * @param strUsername The username
-     * @param strPassword The password
+     * @param strUsername
+     *            The username
+     * @param strPassword
+     *            The password
      */
     public BasicAuthorizationAuthenticator( String strUsername, String strPassword )
     {
@@ -75,10 +75,10 @@ public class BasicAuthorizationAuthenticator extends AbstractAuthenticator
     {
         String strHeader = request.getHeader( HEADER_AUTHORIZATION );
         int nPos = strHeader.indexOf( BASIC_AUTHORIZATION_PREFIX );
-        if( nPos == 0 )
+        if ( nPos == 0 )
         {
-            String strDigest = strHeader.substring( BASIC_AUTHORIZATION_PREFIX.length() );
-            return strDigest.equals( getDigest() );
+            String strDigest = strHeader.substring( BASIC_AUTHORIZATION_PREFIX.length( ) );
+            return strDigest.equals( getDigest( ) );
         }
         return false;
     }
@@ -89,8 +89,7 @@ public class BasicAuthorizationAuthenticator extends AbstractAuthenticator
     @Override
     public void authenticateRequest( HttpMethodBase method, List<String> elements )
     {
-        String strHeader = BASIC_AUTHORIZATION_PREFIX + getDigest();
-        System.out.println( strHeader );
+        String strHeader = BASIC_AUTHORIZATION_PREFIX + getDigest( );
         Header header = new Header( HEADER_AUTHORIZATION, strHeader );
         method.setRequestHeader( header );
     }
@@ -100,11 +99,10 @@ public class BasicAuthorizationAuthenticator extends AbstractAuthenticator
      *
      * @return The digest
      */
-    private String getDigest()
+    private String getDigest( )
     {
         String strSecret = _strUsername + ':' + _strPassword;
-        byte[] encodedBytes = Base64.encodeBase64( strSecret.getBytes() );
-        System.out.println( new String( encodedBytes ) );  // FIXME
+        byte [ ] encodedBytes = Base64.encodeBase64( strSecret.getBytes( ) );
 
         return new String( encodedBytes );
     }

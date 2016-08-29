@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,8 +40,10 @@ public interface ClientKeyService
 {
     /**
      * provides the client key for a given client ID
-     * @param strClientId The client ID
-     * @return  The client key
+     * 
+     * @param strClientId
+     *            The client ID
+     * @return The client key
      */
-    String getKey( String strClientId ); 
+    String getKey( String strClientId );
 }

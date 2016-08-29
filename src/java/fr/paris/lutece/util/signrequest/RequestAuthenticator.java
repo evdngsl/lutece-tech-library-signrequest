@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,24 +39,29 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * Request Authenticator Interface
+ * 
  * @since v3.0
  */
 public interface RequestAuthenticator
 {
     /**
      * Check the Authentication of a request
-     * @param request The HTTP request
+     * 
+     * @param request
+     *            The HTTP request
      * @return true if authenticated, otherwise false
      */
     boolean isRequestAuthenticated( HttpServletRequest request );
 
     /**
      * Authenticate a request
-     * @param method The HTTP method to authenticate
-     * @param elements List of elements to include in the signature
+     * 
+     * @param method
+     *            The HTTP method to authenticate
+     * @param elements
+     *            List of elements to include in the signature
      */
     void authenticateRequest( HttpMethodBase method, List<String> elements );
 }

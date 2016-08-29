@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,6 @@ import org.apache.log4j.Logger;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * AbstractAuthenticator
  */
@@ -53,7 +52,9 @@ public abstract class AbstractAuthenticator implements RequestAuthenticator
 
     /**
      * Sets the list of signature elements
-     * @param list The list
+     * 
+     * @param list
+     *            The list
      */
     public void setSignatureElements( List<String> list )
     {
@@ -62,27 +63,30 @@ public abstract class AbstractAuthenticator implements RequestAuthenticator
 
     /**
      * Returns the list of signature elements
+     * 
      * @return The list of elements
      */
-    protected List<String> getSignatureElements(  )
+    protected List<String> getSignatureElements( )
     {
         return _listSignatureElements;
     }
 
     /**
      * Sets the Hash service
-     * @param service The Hash service
+     * 
+     * @param service
+     *            The Hash service
      */
     public void setHashService( HashService service )
     {
         _serviceHash = service;
     }
 
-
     /**
-     * Sets validity time period (in seconds) between the timestamp in the request
-     * and the server timestamp
-     * @param lPeriod The validity time period
+     * Sets validity time period (in seconds) between the timestamp in the request and the server timestamp
+     * 
+     * @param lPeriod
+     *            The validity time period
      */
     public void setValidityTimePeriod( long lPeriod )
     {
@@ -91,13 +95,16 @@ public abstract class AbstractAuthenticator implements RequestAuthenticator
 
     /**
      * Create a signature
-     * @param listElements The list of elements that part of the hash
-     * @param strTimestamp The timestamp
+     * 
+     * @param listElements
+     *            The list of elements that part of the hash
+     * @param strTimestamp
+     *            The timestamp
      * @return A signature as an Hexadecimal Hash
      */
-    public String buildSignature( List<String> listElements, String strTimestamp , String strSecret )
+    public String buildSignature( List<String> listElements, String strTimestamp, String strSecret )
     {
-        StringBuilder sb = new StringBuilder(  );
+        StringBuilder sb = new StringBuilder( );
 
         if ( listElements != null )
         {
@@ -110,12 +117,14 @@ public abstract class AbstractAuthenticator implements RequestAuthenticator
         sb.append( strSecret );
         sb.append( strTimestamp );
 
-        return _serviceHash.getHash( sb.toString(  ) );
+        return _serviceHash.getHash( sb.toString( ) );
     }
 
     /**
      * This method checks the date of the request
-     * @param strTimestamp The timestamp
+     * 
+     * @param strTimestamp
+     *            The timestamp
      * @return true if the timestamp is valid, otherwise false
      */
     protected boolean isValidTimestamp( String strTimestamp )
@@ -125,7 +134,7 @@ public abstract class AbstractAuthenticator implements RequestAuthenticator
             try
             {
                 long lTimeRequest = Long.parseLong( strTimestamp );
-                long lTimeCurrent = new Date(  ).getTime(  );
+                long lTimeCurrent = new Date( ).getTime( );
                 boolean bValid = ( ( ( lTimeCurrent - lTimeRequest ) / 1000L ) < _lValidityTimePeriod );
 
                 if ( !bValid )
@@ -135,7 +144,7 @@ public abstract class AbstractAuthenticator implements RequestAuthenticator
 
                 return bValid;
             }
-            catch ( NumberFormatException e )
+            catch( NumberFormatException e )
             {
                 // Invalid Timestamp
                 _logger.error( "SignRequest - Invalid timestamp : " + strTimestamp );

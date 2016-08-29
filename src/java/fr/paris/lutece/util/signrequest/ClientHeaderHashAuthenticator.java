@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,7 +44,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * Client Header Hash Authenticator
  */
@@ -53,26 +52,25 @@ public class ClientHeaderHashAuthenticator extends AbstractAuthenticator impleme
     private static final String HEADER_SIGNATURE = "Lutece Request Signature";
     private static final String HEADER_TIMESTAMP = "Lutece Request Timestamp";
     private static final String HEADER_CLIENT_ID = "Lutece Request ClientID";
-    
+
     private String _strClientId;
     private ClientKeyService _clientKeyService;
 
     /**
-     * Set the client ID 
-     * This setter should be used in the Spring context file of the CLIENT to declare
-     * the client ID.
-     * @param strClientId 
+     * Set the client ID This setter should be used in the Spring context file of the CLIENT to declare the client ID.
+     * 
+     * @param strClientId
      */
     public void setClientId( String strClientId )
     {
         _strClientId = strClientId;
     }
-    
+
     /**
-     * Set the clientKeyService
-     * This setter should be used in the Spring context file of the SERVER to 
-     * provide a lookup service to find keys for given client ids.
-     * @param clientKeyService 
+     * Set the clientKeyService This setter should be used in the Spring context file of the SERVER to provide a lookup service to find keys for given client
+     * ids.
+     * 
+     * @param clientKeyService
      */
     public void setClientKeyService( ClientKeyService clientKeyService )
     {
@@ -88,7 +86,6 @@ public class ClientHeaderHashAuthenticator extends AbstractAuthenticator impleme
         String strHash1 = request.getHeader( HEADER_SIGNATURE );
         String strTimestamp = request.getHeader( HEADER_TIMESTAMP );
         String strClientId = request.getHeader( HEADER_CLIENT_ID );
-        
 
         // no signature or timestamp
         if ( ( strHash1 == null ) || ( strTimestamp == null ) || ( strClientId == null ) )
@@ -105,9 +102,9 @@ public class ClientHeaderHashAuthenticator extends AbstractAuthenticator impleme
             return false;
         }
 
-        List<String> listElements = new ArrayList<String>(  );
+        List<String> listElements = new ArrayList<String>( );
 
-        for ( String strParameter : getSignatureElements(  ) )
+        for ( String strParameter : getSignatureElements( ) )
         {
             String strValue = request.getParameter( strParameter );
 
@@ -118,7 +115,7 @@ public class ClientHeaderHashAuthenticator extends AbstractAuthenticator impleme
         }
 
         String strClientKey = _clientKeyService.getKey( strClientId );
-        String strHash2 = buildSignature( listElements, strTimestamp , strClientKey );
+        String strHash2 = buildSignature( listElements, strTimestamp, strClientKey );
 
         return strHash1.equals( strHash2 );
     }
@@ -129,15 +126,15 @@ public class ClientHeaderHashAuthenticator extends AbstractAuthenticator impleme
     @Override
     public void authenticateRequest( HttpMethodBase method, List<String> elements )
     {
-        String strTimestamp = "" + new Date(  ).getTime(  );
+        String strTimestamp = "" + new Date( ).getTime( );
         Header header = new Header( HEADER_TIMESTAMP, strTimestamp );
         method.setRequestHeader( header );
 
         header = new Header( HEADER_CLIENT_ID, _strClientId );
         method.setRequestHeader( header );
-        
+
         String strClientKey = _clientKeyService.getKey( _strClientId );
-        String strSignature = buildSignature( elements, strTimestamp , strClientKey );
+        String strSignature = buildSignature( elements, strTimestamp, strClientKey );
         header = new Header( HEADER_SIGNATURE, strSignature );
         method.setRequestHeader( header );
     }

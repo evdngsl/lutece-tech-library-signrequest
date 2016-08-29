@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,7 +40,6 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-
 /**
  * Sha1HashService
  */
@@ -61,38 +60,40 @@ public class Sha1HashService implements HashService
         {
             md1 = MessageDigest.getInstance( "SHA-1" );
         }
-        catch ( NoSuchAlgorithmException e )
+        catch( NoSuchAlgorithmException e )
         {
-            _logger.error( "Error creating hash " + e.getMessage(  ), e );
+            _logger.error( "Error creating hash " + e.getMessage( ), e );
         }
 
         try
         {
             md1.update( strSource.getBytes( "UTF-8" ) );
         }
-        catch ( UnsupportedEncodingException e )
+        catch( UnsupportedEncodingException e )
         {
-            _logger.error( "Error creating hash " + e.getMessage(  ), e );
+            _logger.error( "Error creating hash " + e.getMessage( ), e );
         }
 
-        return hex( md1.digest(  ) );
+        return hex( md1.digest( ) );
     }
 
     /**
      * Convert bytes into an hexadecimal string
-     * @param bytes Array of bytes
+     * 
+     * @param bytes
+     *            Array of bytes
      * @return An Hexadecimal string
      */
-    private static String hex( byte[] bytes )
+    private static String hex( byte [ ] bytes )
     {
         StringBuilder sb = new StringBuilder( bytes.length * 2 );
 
         for ( int i = 0; i < bytes.length; i++ )
         {
-            int b = bytes[i] & 0xFF;
+            int b = bytes [i] & 0xFF;
             sb.append( HEX_DIGITS.charAt( b >>> 4 ) ).append( HEX_DIGITS.charAt( b & 0xF ) );
         }
 
-        return sb.toString(  );
+        return sb.toString( );
     }
 }

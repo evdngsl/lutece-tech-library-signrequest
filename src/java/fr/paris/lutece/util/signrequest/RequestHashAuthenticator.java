@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,7 +42,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * RequestHashAuthenticator
  */
@@ -75,9 +74,9 @@ public class RequestHashAuthenticator extends AbstractPrivateKeyAuthenticator im
             return false;
         }
 
-        List<String> listElements = new ArrayList<String>(  );
+        List<String> listElements = new ArrayList<String>( );
 
-        for ( String strParameter : getSignatureElements(  ) )
+        for ( String strParameter : getSignatureElements( ) )
         {
             String strValue = request.getParameter( strParameter );
 
@@ -87,7 +86,7 @@ public class RequestHashAuthenticator extends AbstractPrivateKeyAuthenticator im
             }
         }
 
-        String strHash2 = buildSignature( listElements, strTimestamp, getPrivateKey() );
+        String strHash2 = buildSignature( listElements, strTimestamp, getPrivateKey( ) );
 
         return strHash1.equals( strHash2 );
     }
@@ -98,11 +97,11 @@ public class RequestHashAuthenticator extends AbstractPrivateKeyAuthenticator im
     @Override
     public void authenticateRequest( HttpMethodBase method, List<String> elements )
     {
-        String strQueryString = method.getQueryString(  );
-        String strTimestamp = "" + new Date(  ).getTime(  );
+        String strQueryString = method.getQueryString( );
+        String strTimestamp = "" + new Date( ).getTime( );
         strQueryString += ( "&" + PARAMETER_TIMESTAMP + "=" + strTimestamp );
 
-        String strSignature = buildSignature( elements, strTimestamp, getPrivateKey() );
+        String strSignature = buildSignature( elements, strTimestamp, getPrivateKey( ) );
         strQueryString += ( "&" + PARAMETER_SIGNATURE + "=" + strSignature );
 
         method.setQueryString( strQueryString );
@@ -110,7 +109,7 @@ public class RequestHashAuthenticator extends AbstractPrivateKeyAuthenticator im
 
     public String addExtrasUrlParameters( String url, List<String> elements )
     {
-        StringBuilder sbExtrasParameters = new StringBuilder(  );
+        StringBuilder sbExtrasParameters = new StringBuilder( );
 
         if ( url.contains( "=" ) )
         {
@@ -121,26 +120,29 @@ public class RequestHashAuthenticator extends AbstractPrivateKeyAuthenticator im
             sbExtrasParameters.append( url ).append( "?" );
         }
 
-        String strTimestamp = "" + new Date(  ).getTime(  );
+        String strTimestamp = "" + new Date( ).getTime( );
         sbExtrasParameters.append( PARAMETER_TIMESTAMP ).append( "=" ).append( strTimestamp );
 
-        String strSignature = buildSignature( elements, strTimestamp, getPrivateKey() );
+        String strSignature = buildSignature( elements, strTimestamp, getPrivateKey( ) );
         sbExtrasParameters.append( "&" ).append( PARAMETER_SIGNATURE ).append( "=" ).append( strSignature );
 
-        return sbExtrasParameters.toString(  );
+        return sbExtrasParameters.toString( );
     }
 
     /**
      * Add security parameters to a parameter map
-     * @param mapParameters The parameter map
-     * @param elements The element list to build the signature
+     * 
+     * @param mapParameters
+     *            The parameter map
+     * @param elements
+     *            The element list to build the signature
      */
     public void addSecurityParameters( Map mapParameters, List<String> elements )
     {
-        String strTimestamp = "" + new Date(  ).getTime(  );
+        String strTimestamp = "" + new Date( ).getTime( );
         mapParameters.put( PARAMETER_TIMESTAMP, strTimestamp );
 
-        String strSignature = buildSignature( elements, strTimestamp, getPrivateKey() );
+        String strSignature = buildSignature( elements, strTimestamp, getPrivateKey( ) );
         mapParameters.put( PARAMETER_SIGNATURE, strSignature );
     }
 }

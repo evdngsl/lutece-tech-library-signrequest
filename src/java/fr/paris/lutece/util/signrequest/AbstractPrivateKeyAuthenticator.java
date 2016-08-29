@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -39,24 +39,26 @@ package fr.paris.lutece.util.signrequest;
 public abstract class AbstractPrivateKeyAuthenticator extends AbstractAuthenticator
 {
     private String _strPrivateKey;
-    
+
     /**
      * Sets the private key
-     * @param strKey The private key
+     * 
+     * @param strKey
+     *            The private key
      */
     public void setPrivateKey( String strKey )
     {
         _strPrivateKey = strKey;
     }
-    
+
     /**
      * Gets the private key
-     * @return the private key 
+     * 
+     * @return the private key
      */
-    protected String getPrivateKey()
+    protected String getPrivateKey( )
     {
         return _strPrivateKey;
     }
 
-    
 }

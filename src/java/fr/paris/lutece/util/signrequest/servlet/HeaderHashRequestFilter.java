@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,6 @@ package fr.paris.lutece.util.signrequest.servlet;
 import fr.paris.lutece.util.signrequest.AbstractAuthenticator;
 import fr.paris.lutece.util.signrequest.HeaderHashAuthenticator;
 
-
 /**
  * Header Hash Request Filter
  */
@@ -45,8 +44,8 @@ public class HeaderHashRequestFilter extends AbstractRequestFilter
     /**
      * {@inheritDoc }
      */
-    protected AbstractAuthenticator getAuthenticator(  )
+    protected AbstractAuthenticator getAuthenticator( )
     {
-        return new HeaderHashAuthenticator(  );
+        return new HeaderHashAuthenticator( );
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,7 +53,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 /**
  * SimpleHash Sign Request Filter
  */
@@ -66,9 +65,10 @@ public abstract class AbstractRequestFilter implements Filter
 
     /**
      * The implementation should provide the authenticator to use
+     * 
      * @return The authenticator to be used by the filter
      */
-    protected abstract AbstractAuthenticator getAuthenticator(  );
+    protected abstract AbstractAuthenticator getAuthenticator( );
 
     /**
      * {@inheritDoc }
@@ -76,26 +76,26 @@ public abstract class AbstractRequestFilter implements Filter
     @Override
     public void init( FilterConfig filterConfig ) throws ServletException
     {
-        _authenticator = getAuthenticator(  );
+        _authenticator = getAuthenticator( );
 
         // Set the Hashing service
-        _authenticator.setHashService( new Sha1HashService(  ) );
+        _authenticator.setHashService( new Sha1HashService( ) );
 
-        if( _authenticator instanceof AbstractPrivateKeyAuthenticator )
+        if ( _authenticator instanceof AbstractPrivateKeyAuthenticator )
         {
             // Set the shared secret between client and server
             String strPrivateKey = filterConfig.getInitParameter( PARAMETER_PRIVATE_KEY );
-            ((AbstractPrivateKeyAuthenticator) _authenticator).setPrivateKey( strPrivateKey );
-        } 
+            ( (AbstractPrivateKeyAuthenticator) _authenticator ).setPrivateKey( strPrivateKey );
+        }
 
         // Set the list of elements that compose the signature
         String strElementsList = filterConfig.getInitParameter( PARAMETER_ELEMENTS_SIGNATURE );
         StringTokenizer st = new StringTokenizer( strElementsList, "," );
-        List<String> listElements = new ArrayList<String>(  );
+        List<String> listElements = new ArrayList<String>( );
 
-        while ( st.hasMoreTokens(  ) )
+        while ( st.hasMoreTokens( ) )
         {
-            listElements.add( st.nextToken(  ).trim(  ) );
+            listElements.add( st.nextToken( ).trim( ) );
         }
 
         _authenticator.setSignatureElements( listElements );
@@ -109,8 +109,7 @@ public abstract class AbstractRequestFilter implements Filter
      * {@inheritDoc }
      */
     @Override
-    public void doFilter( ServletRequest request, ServletResponse response, FilterChain chain )
-        throws IOException, ServletException
+    public void doFilter( ServletRequest request, ServletResponse response, FilterChain chain ) throws IOException, ServletException
     {
         if ( _authenticator.isRequestAuthenticated( (HttpServletRequest) request ) )
         {
@@ -126,7 +125,7 @@ public abstract class AbstractRequestFilter implements Filter
      * {@inheritDoc }
      */
     @Override
-    public void destroy(  )
+    public void destroy( )
     {
     }
 }

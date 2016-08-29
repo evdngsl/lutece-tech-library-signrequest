@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.util.signrequest.security;
 
-
 /**
  * HashService
  */
@@ -41,7 +40,9 @@ public interface HashService
 {
     /**
      * Create a Hash string from a given source
-     * @param strSource The source
+     * 
+     * @param strSource
+     *            The source
      * @return The Hash
      */
     String getHash( String strSource );

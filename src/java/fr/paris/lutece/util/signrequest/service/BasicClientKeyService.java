@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,27 +41,27 @@ import java.util.Map;
  */
 public class BasicClientKeyService implements ClientKeyService
 {
-    
-    private Map<String,String> _mapClients = new HashMap<String,String>();
+
+    private Map<String, String> _mapClients = new HashMap<String, String>( );
 
     /**
      * Set the clients map (id /key)
-     * @param mapClients The client map
+     * 
+     * @param mapClients
+     *            The client map
      */
     public void setClientsMap( Map mapClients )
     {
         _mapClients = mapClients;
     }
-    
+
     /**
      * {@inheritDoc }
      */
     @Override
-    public String getKey(String strClientId)
+    public String getKey( String strClientId )
     {
         return _mapClients.get( strClientId );
     }
 
-    
-    
 }

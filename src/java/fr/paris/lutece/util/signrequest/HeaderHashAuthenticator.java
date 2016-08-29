@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2015, Mairie de Paris
+ * Copyright (c) 2002-2016, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,7 +42,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /**
  * HeaderHashAuthenticator
  */
@@ -75,9 +74,9 @@ public class HeaderHashAuthenticator extends AbstractPrivateKeyAuthenticator imp
             return false;
         }
 
-        List<String> listElements = new ArrayList<String>(  );
+        List<String> listElements = new ArrayList<String>( );
 
-        for ( String strParameter : getSignatureElements(  ) )
+        for ( String strParameter : getSignatureElements( ) )
         {
             String strValue = request.getParameter( strParameter );
 
@@ -87,7 +86,7 @@ public class HeaderHashAuthenticator extends AbstractPrivateKeyAuthenticator imp
             }
         }
 
-        String strHash2 = buildSignature( listElements, strTimestamp, getPrivateKey() );
+        String strHash2 = buildSignature( listElements, strTimestamp, getPrivateKey( ) );
 
         return strHash1.equals( strHash2 );
     }
@@ -98,11 +97,11 @@ public class HeaderHashAuthenticator extends AbstractPrivateKeyAuthenticator imp
     @Override
     public void authenticateRequest( HttpMethodBase method, List<String> elements )
     {
-        String strTimestamp = "" + new Date(  ).getTime(  );
+        String strTimestamp = "" + new Date( ).getTime( );
         Header header = new Header( HEADER_TIMESTAMP, strTimestamp );
         method.setRequestHeader( header );
 
-        String strSignature = buildSignature( elements, strTimestamp, getPrivateKey() );
+        String strSignature = buildSignature( elements, strTimestamp, getPrivateKey( ) );
         header = new Header( HEADER_SIGNATURE, strSignature );
         method.setRequestHeader( header );
     }

@@ -53,14 +53,13 @@ public class BasicAuthorizationAuthenticatorTest
      * Test of isRequestAuthenticated method, of class BasicAuthorizationAuthenticator.
      */
     @Test
-    public void testIsRequestAuthenticated()
+    public void testIsRequestAuthenticated( )
     {
         System.out.println( "isRequestAuthenticated" );
-        MokeHttpServletRequest request = new MokeHttpServletRequest();
+        MokeHttpServletRequest request = new MokeHttpServletRequest( );
         request.addMokeHeader( HEADER_AUTHORIZATION, BASIC_AUTHORIZATION_PREFIX + VALID_DIGEST );
-        BasicAuthorizationAuthenticator authenticator = new BasicAuthorizationAuthenticator( USERNAME , PASSWORD );
-        assertTrue( authenticator.isRequestAuthenticated( request ));
+        BasicAuthorizationAuthenticator authenticator = new BasicAuthorizationAuthenticator( USERNAME, PASSWORD );
+        assertTrue( authenticator.isRequestAuthenticated( request ) );
     }
 
-    
 }
