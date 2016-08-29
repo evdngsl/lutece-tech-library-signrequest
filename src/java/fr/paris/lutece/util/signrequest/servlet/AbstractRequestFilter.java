@@ -35,7 +35,6 @@ package fr.paris.lutece.util.signrequest.servlet;
 
 import fr.paris.lutece.util.signrequest.AbstractAuthenticator;
 import fr.paris.lutece.util.signrequest.AbstractPrivateKeyAuthenticator;
-import fr.paris.lutece.util.signrequest.ClientHeaderHashAuthenticator;
 import fr.paris.lutece.util.signrequest.security.Sha1HashService;
 
 import java.io.IOException;

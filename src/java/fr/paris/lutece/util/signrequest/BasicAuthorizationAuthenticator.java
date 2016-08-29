@@ -50,8 +50,8 @@ public class BasicAuthorizationAuthenticator extends AbstractAuthenticator
 
     private static final String HEADER_AUTHORIZATION = "Authorization";
     private static final String BASIC_AUTHORIZATION_PREFIX = "Basic ";
-    private String _strUsername;
-    private String _strPassword;
+    private final String _strUsername;
+    private final String _strPassword;
 
     /**
      * Constructor that define credentials
@@ -63,6 +63,7 @@ public class BasicAuthorizationAuthenticator extends AbstractAuthenticator
      */
     public BasicAuthorizationAuthenticator( String strUsername, String strPassword )
     {
+        super();
         _strUsername = strUsername;
         _strPassword = strPassword;
     }

@@ -62,14 +62,14 @@ public class RequestHashAuthenticator extends AbstractPrivateKeyAuthenticator im
         // no signature or timestamp
         if ( ( strHash1 == null ) || ( strTimestamp == null ) )
         {
-            _logger.info( "SignRequest - Invalid signature" );
+            LOGGER.info( "SignRequest - Invalid signature" );
 
             return false;
         }
 
         if ( !isValidTimestamp( strTimestamp ) )
         {
-            _logger.info( "SignRequest - Invalid timestamp : " + strTimestamp );
+            LOGGER.info( "SignRequest - Invalid timestamp : " + strTimestamp );
 
             return false;
         }
@@ -98,7 +98,7 @@ public class RequestHashAuthenticator extends AbstractPrivateKeyAuthenticator im
     public void authenticateRequest( HttpMethodBase method, List<String> elements )
     {
         String strQueryString = method.getQueryString( );
-        String strTimestamp = "" + new Date( ).getTime( );
+        String strTimestamp = String.valueOf( new Date( ).getTime( ) );
         strQueryString += ( "&" + PARAMETER_TIMESTAMP + "=" + strTimestamp );
 
         String strSignature = buildSignature( elements, strTimestamp, getPrivateKey( ) );
@@ -107,24 +107,30 @@ public class RequestHashAuthenticator extends AbstractPrivateKeyAuthenticator im
         method.setQueryString( strQueryString );
     }
 
-    public String addExtrasUrlParameters( String url, List<String> elements )
+    /**
+     * Add extra URL parameters
+     * @param strUrl The URL
+     * @param listElements extra elements
+     * @return The new URL
+     */
+    public String addExtrasUrlParameters( String strUrl, List<String> listElements )
     {
         StringBuilder sbExtrasParameters = new StringBuilder( );
 
-        if ( url.contains( "=" ) )
+        if ( strUrl.contains( "=" ) )
         {
-            sbExtrasParameters.append( url ).append( "&" );
+            sbExtrasParameters.append( strUrl ).append( '&' );
         }
         else
         {
-            sbExtrasParameters.append( url ).append( "?" );
+            sbExtrasParameters.append( strUrl ).append( '?' );
         }
 
-        String strTimestamp = "" + new Date( ).getTime( );
-        sbExtrasParameters.append( PARAMETER_TIMESTAMP ).append( "=" ).append( strTimestamp );
+        String strTimestamp = String.valueOf( new Date( ).getTime( ) );
+        sbExtrasParameters.append( PARAMETER_TIMESTAMP ).append( '=' ).append( strTimestamp );
 
-        String strSignature = buildSignature( elements, strTimestamp, getPrivateKey( ) );
-        sbExtrasParameters.append( "&" ).append( PARAMETER_SIGNATURE ).append( "=" ).append( strSignature );
+        String strSignature = buildSignature( listElements, strTimestamp, getPrivateKey( ) );
+        sbExtrasParameters.append( '&' ).append( PARAMETER_SIGNATURE ).append( '=' ).append( strSignature );
 
         return sbExtrasParameters.toString( );
     }
@@ -134,15 +140,15 @@ public class RequestHashAuthenticator extends AbstractPrivateKeyAuthenticator im
      * 
      * @param mapParameters
      *            The parameter map
-     * @param elements
+     * @param listElements
      *            The element list to build the signature
      */
-    public void addSecurityParameters( Map mapParameters, List<String> elements )
+    public void addSecurityParameters( Map mapParameters, List<String> listElements )
     {
-        String strTimestamp = "" + new Date( ).getTime( );
+        String strTimestamp = String.valueOf( new Date( ).getTime( ) );
         mapParameters.put( PARAMETER_TIMESTAMP, strTimestamp );
 
-        String strSignature = buildSignature( elements, strTimestamp, getPrivateKey( ) );
+        String strSignature = buildSignature( listElements, strTimestamp, getPrivateKey( ) );
         mapParameters.put( PARAMETER_SIGNATURE, strSignature );
     }
 }

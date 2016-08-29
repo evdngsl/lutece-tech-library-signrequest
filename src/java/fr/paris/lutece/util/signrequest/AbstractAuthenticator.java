@@ -45,7 +45,7 @@ import java.util.List;
  */
 public abstract class AbstractAuthenticator implements RequestAuthenticator
 {
-    protected static Logger _logger = Logger.getLogger( "lutece.security.signrequest" );
+    protected static final Logger LOGGER = Logger.getLogger( "lutece.security.signrequest" );
     private static HashService _serviceHash;
     private List<String> _listSignatureElements;
     private long _lValidityTimePeriod;
@@ -100,24 +100,24 @@ public abstract class AbstractAuthenticator implements RequestAuthenticator
      *            The list of elements that part of the hash
      * @param strTimestamp
      *            The timestamp
+     * @param strSecret The secret
      * @return A signature as an Hexadecimal Hash
      */
     public String buildSignature( List<String> listElements, String strTimestamp, String strSecret )
     {
-        StringBuilder sb = new StringBuilder( );
+        StringBuilder sbSignature = new StringBuilder( );
 
         if ( listElements != null )
         {
             for ( String strElement : listElements )
             {
-                sb.append( strElement );
+                sbSignature.append( strElement );
             }
         }
 
-        sb.append( strSecret );
-        sb.append( strTimestamp );
+        sbSignature.append( strSecret ).append( strTimestamp );
 
-        return _serviceHash.getHash( sb.toString( ) );
+        return _serviceHash.getHash( sbSignature.toString( ) );
     }
 
     /**
@@ -139,7 +139,7 @@ public abstract class AbstractAuthenticator implements RequestAuthenticator
 
                 if ( !bValid )
                 {
-                    _logger.info( "SignRequest - Timestamp expired : " + strTimestamp );
+                    LOGGER.info( "SignRequest - Timestamp expired : " + strTimestamp );
                 }
 
                 return bValid;
@@ -147,7 +147,7 @@ public abstract class AbstractAuthenticator implements RequestAuthenticator
             catch( NumberFormatException e )
             {
                 // Invalid Timestamp
-                _logger.error( "SignRequest - Invalid timestamp : " + strTimestamp );
+                LOGGER.error( "SignRequest - Invalid timestamp : " + strTimestamp );
 
                 return false;
             }

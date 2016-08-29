@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.util.signrequest;
 
-import static fr.paris.lutece.util.signrequest.AbstractAuthenticator._logger;
 import fr.paris.lutece.util.signrequest.service.ClientKeyService;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethodBase;
@@ -43,6 +42,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import static fr.paris.lutece.util.signrequest.AbstractAuthenticator.LOGGER;
 
 /**
  * Client Header Hash Authenticator
@@ -59,7 +59,7 @@ public class ClientHeaderHashAuthenticator extends AbstractAuthenticator impleme
     /**
      * Set the client ID This setter should be used in the Spring context file of the CLIENT to declare the client ID.
      * 
-     * @param strClientId
+     * @param strClientId The client ID
      */
     public void setClientId( String strClientId )
     {
@@ -70,7 +70,7 @@ public class ClientHeaderHashAuthenticator extends AbstractAuthenticator impleme
      * Set the clientKeyService This setter should be used in the Spring context file of the SERVER to provide a lookup service to find keys for given client
      * ids.
      * 
-     * @param clientKeyService
+     * @param clientKeyService The client key service
      */
     public void setClientKeyService( ClientKeyService clientKeyService )
     {
@@ -90,14 +90,14 @@ public class ClientHeaderHashAuthenticator extends AbstractAuthenticator impleme
         // no signature or timestamp
         if ( ( strHash1 == null ) || ( strTimestamp == null ) || ( strClientId == null ) )
         {
-            _logger.info( "SignRequest - Invalid signature" );
+            LOGGER.info( "SignRequest - Invalid signature" );
 
             return false;
         }
 
         if ( !isValidTimestamp( strTimestamp ) )
         {
-            _logger.info( "SignRequest - Invalid timestamp : " + strTimestamp );
+            LOGGER.info( "SignRequest - Invalid timestamp : " + strTimestamp );
 
             return false;
         }
@@ -126,7 +126,7 @@ public class ClientHeaderHashAuthenticator extends AbstractAuthenticator impleme
     @Override
     public void authenticateRequest( HttpMethodBase method, List<String> elements )
     {
-        String strTimestamp = "" + new Date( ).getTime( );
+        String strTimestamp = String.valueOf( new Date( ).getTime( ) );
         Header header = new Header( HEADER_TIMESTAMP, strTimestamp );
         method.setRequestHeader( header );
 

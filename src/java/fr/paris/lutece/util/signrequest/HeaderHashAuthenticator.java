@@ -62,14 +62,14 @@ public class HeaderHashAuthenticator extends AbstractPrivateKeyAuthenticator imp
         // no signature or timestamp
         if ( ( strHash1 == null ) || ( strTimestamp == null ) )
         {
-            _logger.info( "SignRequest - Invalid signature" );
+            LOGGER.info( "SignRequest - Invalid signature" );
 
             return false;
         }
 
         if ( !isValidTimestamp( strTimestamp ) )
         {
-            _logger.info( "SignRequest - Invalid timestamp : " + strTimestamp );
+            LOGGER.info( "SignRequest - Invalid timestamp : " + strTimestamp );
 
             return false;
         }
@@ -97,7 +97,7 @@ public class HeaderHashAuthenticator extends AbstractPrivateKeyAuthenticator imp
     @Override
     public void authenticateRequest( HttpMethodBase method, List<String> elements )
     {
-        String strTimestamp = "" + new Date( ).getTime( );
+        String strTimestamp = String.valueOf(  new Date( ).getTime( ) );
         Header header = new Header( HEADER_TIMESTAMP, strTimestamp );
         method.setRequestHeader( header );
 
