@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.util.signrequest;
 
+import java.util.List;
+
 /**
  * Abstract Private Key Authenticator
  */
@@ -61,4 +63,14 @@ public abstract class AbstractPrivateKeyAuthenticator extends AbstractAuthentica
         return _strPrivateKey;
     }
 
+    /**
+     * Create a signature
+     * @param listElements The list of elements that part of the hash
+     * @param strTimestamp The timestamp
+     * @return A signature as an Hexadecimal Hash
+     */
+    public String buildSignature( List<String> listElements, String strTimestamp )
+    {
+        return buildSignature( listElements, strTimestamp, getPrivateKey( ) );
+    }
 }
