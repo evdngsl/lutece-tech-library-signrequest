@@ -49,9 +49,9 @@ import static fr.paris.lutece.util.signrequest.AbstractAuthenticator.LOGGER;
  */
 public class ClientHeaderHashAuthenticator extends AbstractAuthenticator implements RequestAuthenticator
 {
-    private static final String HEADER_SIGNATURE = "Lutece Request Signature";
-    private static final String HEADER_TIMESTAMP = "Lutece Request Timestamp";
-    private static final String HEADER_CLIENT_ID = "Lutece Request ClientID";
+    private static final String HEADER_SIGNATURE = "Lutece-Request-Signature";
+    private static final String HEADER_TIMESTAMP = "Lutece-Request-Timestamp";
+    private static final String HEADER_CLIENT_ID = "Lutece-Request-ClientID";
 
     private String _strClientId;
     private ClientKeyService _clientKeyService;

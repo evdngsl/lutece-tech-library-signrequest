@@ -47,8 +47,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class HeaderHashAuthenticator extends AbstractPrivateKeyAuthenticator implements RequestAuthenticator
 {
-    private static final String HEADER_SIGNATURE = "Lutece Request Signature";
-    private static final String HEADER_TIMESTAMP = "Lutece Request Timestamp";
+    private static final String HEADER_SIGNATURE = "Lutece-Request-Signature";
+    private static final String HEADER_TIMESTAMP = "Lutece-Request-Timestamp";
 
     /**
      * {@inheritDoc }
