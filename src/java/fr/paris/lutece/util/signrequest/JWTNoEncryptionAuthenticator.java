@@ -38,21 +38,21 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.httpclient.HttpMethodBase;
 
-
 public class JWTNoEncryptionAuthenticator extends AbstractJWTAuthenticator
 {
     /**
      * Constructor
+     * 
      * @param mapClaimsToCheck
-     *          The map of claims key/values to check in the JWT
+     *            The map of claims key/values to check in the JWT
      * @param strJWTHttpHeader
-     *          The name of the header which contains the JWT
+     *            The name of the header which contains the JWT
      */
-    public JWTNoEncryptionAuthenticator( Map<String,String> mapClaimsToCheck, String strJWTHttpHeader )
+    public JWTNoEncryptionAuthenticator( Map<String, String> mapClaimsToCheck, String strJWTHttpHeader )
     {
         super( mapClaimsToCheck, strJWTHttpHeader );
     }
-    
+
     /**
      * {@inheritDoc }
      */
@@ -60,7 +60,7 @@ public class JWTNoEncryptionAuthenticator extends AbstractJWTAuthenticator
     public boolean isRequestAuthenticated( HttpServletRequest request )
     {
         // No signature checking for this implementation
-        return super.isRequestAuthenticated ( request );
+        return super.isRequestAuthenticated( request );
     }
 
     /**
@@ -69,6 +69,6 @@ public class JWTNoEncryptionAuthenticator extends AbstractJWTAuthenticator
     @Override
     public void authenticateRequest( HttpMethodBase method, List<String> elements )
     {
-        //TODO : already use only for validate request
+        // TODO : already use only for validate request
     }
 }

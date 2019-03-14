@@ -65,8 +65,11 @@ public abstract class AbstractPrivateKeyAuthenticator extends AbstractAuthentica
 
     /**
      * Create a signature
-     * @param listElements The list of elements that part of the hash
-     * @param strTimestamp The timestamp
+     * 
+     * @param listElements
+     *            The list of elements that part of the hash
+     * @param strTimestamp
+     *            The timestamp
      * @return A signature as an Hexadecimal Hash
      */
     public String buildSignature( List<String> listElements, String strTimestamp )

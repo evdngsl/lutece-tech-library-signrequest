@@ -59,7 +59,8 @@ public class ClientHeaderHashAuthenticator extends AbstractAuthenticator impleme
     /**
      * Set the client ID This setter should be used in the Spring context file of the CLIENT to declare the client ID.
      * 
-     * @param strClientId The client ID
+     * @param strClientId
+     *            The client ID
      */
     public void setClientId( String strClientId )
     {
@@ -70,7 +71,8 @@ public class ClientHeaderHashAuthenticator extends AbstractAuthenticator impleme
      * Set the clientKeyService This setter should be used in the Spring context file of the SERVER to provide a lookup service to find keys for given client
      * ids.
      * 
-     * @param clientKeyService The client key service
+     * @param clientKeyService
+     *            The client key service
      */
     public void setClientKeyService( ClientKeyService clientKeyService )
     {

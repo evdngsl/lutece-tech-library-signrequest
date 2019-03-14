@@ -39,37 +39,37 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.httpclient.HttpMethodBase;
 
-
 public class JWTSecretKeyAuthenticator extends AbstractJWTAuthenticator
 {
     private String _strSecretKey;
-    
+
     /**
      * Constructor
+     * 
      * @param mapClaimsToCheck
-     *          The map of claims key/values to check in the JWT
+     *            The map of claims key/values to check in the JWT
      * @param strJWTHttpHeader
-     *          The name of the header which contains the JWT
+     *            The name of the header which contains the JWT
      * @param strSecretKey
-     *          The secret key
+     *            The secret key
      */
-    public JWTSecretKeyAuthenticator( Map<String,String> mapClaimsToCheck, String strJWTHttpHeader, String strSecretKey )
+    public JWTSecretKeyAuthenticator( Map<String, String> mapClaimsToCheck, String strJWTHttpHeader, String strSecretKey )
     {
         super( mapClaimsToCheck, strJWTHttpHeader );
         _strSecretKey = strSecretKey;
     }
-    
+
     /**
      * {@inheritDoc }
      */
     @Override
     public boolean isRequestAuthenticated( HttpServletRequest request )
     {
-        boolean isAuthenticated = super.isRequestAuthenticated ( request );
-        
+        boolean isAuthenticated = super.isRequestAuthenticated( request );
+
         if ( isAuthenticated )
         {
-            return JWTUtil.checkSignature(request, _strJWTHttpHeader, _strSecretKey );
+            return JWTUtil.checkSignature( request, _strJWTHttpHeader, _strSecretKey );
         }
         return false;
     }
@@ -80,6 +80,6 @@ public class JWTSecretKeyAuthenticator extends AbstractJWTAuthenticator
     @Override
     public void authenticateRequest( HttpMethodBase method, List<String> elements )
     {
-        //TODO : already use only for validate request
+        // TODO : already use only for validate request
     }
 }

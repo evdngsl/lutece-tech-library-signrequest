@@ -100,7 +100,8 @@ public abstract class AbstractAuthenticator implements RequestAuthenticator
      *            The list of elements that part of the hash
      * @param strTimestamp
      *            The timestamp
-     * @param strSecret The secret
+     * @param strSecret
+     *            The secret
      * @return A signature as an Hexadecimal Hash
      */
     public String buildSignature( List<String> listElements, String strTimestamp, String strSecret )

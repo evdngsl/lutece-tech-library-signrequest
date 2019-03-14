@@ -97,7 +97,7 @@ public class HeaderHashAuthenticator extends AbstractPrivateKeyAuthenticator imp
     @Override
     public void authenticateRequest( HttpMethodBase method, List<String> elements )
     {
-        String strTimestamp = String.valueOf(  new Date( ).getTime( ) );
+        String strTimestamp = String.valueOf( new Date( ).getTime( ) );
         Header header = new Header( HEADER_TIMESTAMP, strTimestamp );
         method.setRequestHeader( header );
 

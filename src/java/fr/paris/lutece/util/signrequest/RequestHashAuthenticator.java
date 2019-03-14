@@ -109,8 +109,11 @@ public class RequestHashAuthenticator extends AbstractPrivateKeyAuthenticator im
 
     /**
      * Add extra URL parameters
-     * @param strUrl The URL
-     * @param listElements extra elements
+     * 
+     * @param strUrl
+     *            The URL
+     * @param listElements
+     *            extra elements
      * @return The new URL
      */
     public String addExtrasUrlParameters( String strUrl, List<String> listElements )

@@ -63,7 +63,7 @@ public class BasicAuthorizationAuthenticator extends AbstractAuthenticator
      */
     public BasicAuthorizationAuthenticator( String strUsername, String strPassword )
     {
-        super();
+        super( );
         _strUsername = strUsername;
         _strPassword = strPassword;
     }

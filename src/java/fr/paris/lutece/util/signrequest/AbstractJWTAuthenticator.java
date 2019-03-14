@@ -40,42 +40,42 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.log4j.Logger;
 
-
 /**
  * AbstractAuthenticator
  */
 public abstract class AbstractJWTAuthenticator implements RequestAuthenticator
 {
     protected static final Logger LOGGER = Logger.getLogger( "lutece.security.signrequest" );
-    protected Map<String,String> _mapClaimsToCheck;
+    protected Map<String, String> _mapClaimsToCheck;
     protected String _strJWTHttpHeader;
-    
+
     /**
      * Constructor
+     * 
      * @param mapClaimsToCheck
-     *          The map of claims key/values to check in the JWT
+     *            The map of claims key/values to check in the JWT
      * @param strJWTHttpHeader
-     *          The name of the header which contains the JWT
+     *            The name of the header which contains the JWT
      */
-    public AbstractJWTAuthenticator( Map<String,String> mapClaimsToCheck, String strJWTHttpHeader )
+    public AbstractJWTAuthenticator( Map<String, String> mapClaimsToCheck, String strJWTHttpHeader )
     {
         _mapClaimsToCheck = mapClaimsToCheck;
         _strJWTHttpHeader = strJWTHttpHeader;
-    }    
-    
+    }
+
     /**
      * {@inheritDoc }
      */
     @Override
     public boolean isRequestAuthenticated( HttpServletRequest request )
     {
-        //Verify if the request contains at least a JWT without checking its signature
+        // Verify if the request contains at least a JWT without checking its signature
         if ( !JWTUtil.containsUnsafeJWT( request, _strJWTHttpHeader ) )
         {
             return false;
         }
-        
-        //Verify in the JWT payload, the list of key/values to check
+
+        // Verify in the JWT payload, the list of key/values to check
         if ( !JWTUtil.checkPayloadValues( request, _strJWTHttpHeader, _mapClaimsToCheck ) )
         {
             return false;
@@ -83,11 +83,11 @@ public abstract class AbstractJWTAuthenticator implements RequestAuthenticator
 
         return true;
     }
-    
+
     /**
      * {@inheritDoc }
      */
     @Override
     public abstract void authenticateRequest( HttpMethodBase method, List<String> elements );
-    
+
 }
