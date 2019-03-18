@@ -37,11 +37,14 @@ import fr.paris.lutece.util.jwt.service.JWTUtil;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethodBase;
 
 public class JWTSecretKeyAuthenticator extends AbstractJWTAuthenticator
 {
     private String _strSecretKey;
+    private String _strEncryptionAlgorythmName;
+    private final String DEFAULT_ENC_ALGO_NAME = "HS256";
 
     /**
      * Constructor
@@ -50,13 +53,24 @@ public class JWTSecretKeyAuthenticator extends AbstractJWTAuthenticator
      *            The map of claims key/values to check in the JWT
      * @param strJWTHttpHeader
      *            The name of the header which contains the JWT
+     * @param lValidityPeriod
+     *            The validity period
+     * @param strEncryptionAlgorythmName
+     *            The name of the algorithm. Values are HS256, HS384, HS512
      * @param strSecretKey
      *            The secret key
      */
-    public JWTSecretKeyAuthenticator( Map<String, String> mapClaimsToCheck, String strJWTHttpHeader, String strSecretKey )
+    public JWTSecretKeyAuthenticator( Map<String, String> mapClaimsToCheck, String strJWTHttpHeader, long lValidityPeriod, String strEncryptionAlgorythmName,
+            String strSecretKey )
     {
-        super( mapClaimsToCheck, strJWTHttpHeader );
+        super( mapClaimsToCheck, strJWTHttpHeader, lValidityPeriod );
         _strSecretKey = strSecretKey;
+        _strEncryptionAlgorythmName = strEncryptionAlgorythmName;
+
+        if ( _strEncryptionAlgorythmName == null )
+        {
+            _strEncryptionAlgorythmName = DEFAULT_ENC_ALGO_NAME;
+        }
     }
 
     /**
@@ -80,6 +94,8 @@ public class JWTSecretKeyAuthenticator extends AbstractJWTAuthenticator
     @Override
     public void authenticateRequest( HttpMethodBase method, List<String> elements )
     {
-        // TODO : already use only for validate request
+        Header header = new Header( _strJWTHttpHeader, JWTUtil.buildBase64JWT( _mapClaimsToCheck, getExpirationDate( ), _strEncryptionAlgorythmName,
+                _strSecretKey ) );
+        method.setRequestHeader( header );
     }
 }

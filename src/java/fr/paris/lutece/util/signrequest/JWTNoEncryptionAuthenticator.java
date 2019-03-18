@@ -33,9 +33,11 @@
  */
 package fr.paris.lutece.util.signrequest;
 
+import fr.paris.lutece.util.jwt.service.JWTUtil;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethodBase;
 
 public class JWTNoEncryptionAuthenticator extends AbstractJWTAuthenticator
@@ -48,9 +50,9 @@ public class JWTNoEncryptionAuthenticator extends AbstractJWTAuthenticator
      * @param strJWTHttpHeader
      *            The name of the header which contains the JWT
      */
-    public JWTNoEncryptionAuthenticator( Map<String, String> mapClaimsToCheck, String strJWTHttpHeader )
+    public JWTNoEncryptionAuthenticator( Map<String, String> mapClaimsToCheck, String strJWTHttpHeader, long lValidityTimePeriod )
     {
-        super( mapClaimsToCheck, strJWTHttpHeader );
+        super( mapClaimsToCheck, strJWTHttpHeader, lValidityTimePeriod );
     }
 
     /**
@@ -69,6 +71,7 @@ public class JWTNoEncryptionAuthenticator extends AbstractJWTAuthenticator
     @Override
     public void authenticateRequest( HttpMethodBase method, List<String> elements )
     {
-        // TODO : already use only for validate request
+        Header header = new Header( _strJWTHttpHeader, JWTUtil.buildBase64JWT( _mapClaimsToCheck, getExpirationDate( ), null, null ) );
+        method.setRequestHeader( header );
     }
 }

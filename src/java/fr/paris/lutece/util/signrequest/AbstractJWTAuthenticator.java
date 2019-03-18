@@ -34,16 +34,16 @@
 package fr.paris.lutece.util.signrequest;
 
 import fr.paris.lutece.util.jwt.service.JWTUtil;
-import java.util.List;
+import java.time.Instant;
+import java.util.Date;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.httpclient.HttpMethodBase;
 import org.apache.log4j.Logger;
 
 /**
  * AbstractAuthenticator
  */
-public abstract class AbstractJWTAuthenticator implements RequestAuthenticator
+public abstract class AbstractJWTAuthenticator extends AbstractAuthenticator
 {
     protected static final Logger LOGGER = Logger.getLogger( "lutece.security.signrequest" );
     protected Map<String, String> _mapClaimsToCheck;
@@ -56,11 +56,14 @@ public abstract class AbstractJWTAuthenticator implements RequestAuthenticator
      *            The map of claims key/values to check in the JWT
      * @param strJWTHttpHeader
      *            The name of the header which contains the JWT
+     * @param lValidityTimePeriod
+     *            The validity time period
      */
-    public AbstractJWTAuthenticator( Map<String, String> mapClaimsToCheck, String strJWTHttpHeader )
+    public AbstractJWTAuthenticator( Map<String, String> mapClaimsToCheck, String strJWTHttpHeader, long lValidityTimePeriod )
     {
         _mapClaimsToCheck = mapClaimsToCheck;
         _strJWTHttpHeader = strJWTHttpHeader;
+        _lValidityTimePeriod = lValidityTimePeriod;
     }
 
     /**
@@ -70,7 +73,8 @@ public abstract class AbstractJWTAuthenticator implements RequestAuthenticator
     public boolean isRequestAuthenticated( HttpServletRequest request )
     {
         // Verify if the request contains at least a JWT without checking its signature
-        if ( !JWTUtil.containsUnsafeJWT( request, _strJWTHttpHeader ) )
+        // Verify the expiration date in the exp claim of the JWT
+        if ( !JWTUtil.containsValidUnsafeJWT( request, _strJWTHttpHeader ) )
         {
             return false;
         }
@@ -85,9 +89,13 @@ public abstract class AbstractJWTAuthenticator implements RequestAuthenticator
     }
 
     /**
-     * {@inheritDoc }
+     * Get expiration date
+     * 
+     * @return the expiration date of the JWT
      */
-    @Override
-    public abstract void authenticateRequest( HttpMethodBase method, List<String> elements );
-
+    protected Date getExpirationDate( )
+    {
+        Date expirationDate = Date.from( Instant.now( ).plusMillis( getValidityTimePeriod( ) ) );
+        return expirationDate;
+    }
 }

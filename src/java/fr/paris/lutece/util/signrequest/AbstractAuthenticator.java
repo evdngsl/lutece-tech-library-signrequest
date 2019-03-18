@@ -48,7 +48,7 @@ public abstract class AbstractAuthenticator implements RequestAuthenticator
     protected static final Logger LOGGER = Logger.getLogger( "lutece.security.signrequest" );
     private static HashService _serviceHash;
     private List<String> _listSignatureElements;
-    private long _lValidityTimePeriod;
+    protected long _lValidityTimePeriod;
 
     /**
      * Sets the list of signature elements
@@ -91,6 +91,16 @@ public abstract class AbstractAuthenticator implements RequestAuthenticator
     public void setValidityTimePeriod( long lPeriod )
     {
         _lValidityTimePeriod = lPeriod;
+    }
+
+    /**
+     * Get validity time period (in seconds) between the timestamp in the request and the server timestamp
+     * 
+     * @return the validity time period
+     */
+    public long getValidityTimePeriod( )
+    {
+        return _lValidityTimePeriod;
     }
 
     /**
