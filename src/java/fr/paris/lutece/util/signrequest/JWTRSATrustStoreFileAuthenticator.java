@@ -51,7 +51,7 @@ public class JWTRSATrustStoreFileAuthenticator extends AbstractJWTRSAAuthenticat
     private final String _strCacertPath;
     private final String _strCacertPassword;
     private final String _strAlias;
-    
+
     /**
      * Constructor
      * 
@@ -67,48 +67,48 @@ public class JWTRSATrustStoreFileAuthenticator extends AbstractJWTRSAAuthenticat
      * @param strCacertPassword
      * @param strAlias
      */
-    public JWTRSATrustStoreFileAuthenticator( Map<String, String> mapClaimsToCheck, String strJWTHttpHeader, long lValidityPeriod, String strEncryptionAlgorythmName,
-            String strCacertPath, String strCacertPassword, String strAlias )
+    public JWTRSATrustStoreFileAuthenticator( Map<String, String> mapClaimsToCheck, String strJWTHttpHeader, long lValidityPeriod,
+            String strEncryptionAlgorythmName, String strCacertPath, String strCacertPassword, String strAlias )
     {
         super( mapClaimsToCheck, strJWTHttpHeader, lValidityPeriod, strEncryptionAlgorythmName );
         _strCacertPath = strCacertPath;
         _strCacertPassword = strCacertPassword;
         _strAlias = strAlias;
     }
-    
+
     /**
      * {@inheritDoc }
      */
     @Override
     protected KeyPair getKeyPair( )
     {
-        try 
+        try
         {
             FileInputStream is = new FileInputStream( _strCacertPath );
-            KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
-            keystore.load( is, _strCacertPassword.toCharArray() );
+            KeyStore keystore = KeyStore.getInstance( KeyStore.getDefaultType( ) );
+            keystore.load( is, _strCacertPassword.toCharArray( ) );
             Certificate cert = keystore.getCertificate( _strAlias );
-            PublicKey publicKey = cert.getPublicKey();
+            PublicKey publicKey = cert.getPublicKey( );
 
-            return new KeyPair( publicKey, null);
+            return new KeyPair( publicKey, null );
         }
-        
-        catch ( CertificateException | IOException | KeyStoreException | NoSuchAlgorithmException e ) 
+
+        catch( CertificateException | IOException | KeyStoreException | NoSuchAlgorithmException e )
         {
-            LOGGER.error( "Unable to get key pair from certificate", e);
+            LOGGER.error( "Unable to get key pair from certificate", e );
         }
-        
+
         return null;
     }
-    
+
     /**
      * {@inheritDoc }
      */
     @Override
     public void authenticateRequest( HttpMethodBase method, List<String> elements )
     {
-        //Do nothing : its not possible to authenticate a request only with a trustore file, because its
-        //it only contains public key. Use a JWTCertificateFileAuthenticator if you 
-        //want to sign request with RSA private key.
+        // Do nothing : its not possible to authenticate a request only with a trustore file, because its
+        // it only contains public key. Use a JWTCertificateFileAuthenticator if you
+        // want to sign request with RSA private key.
     }
 }

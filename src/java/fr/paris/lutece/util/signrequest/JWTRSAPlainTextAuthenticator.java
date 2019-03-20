@@ -49,7 +49,7 @@ public class JWTRSAPlainTextAuthenticator extends AbstractJWTRSAAuthenticator
 {
     String _strPlainTextPublicKey;
     String _strPlainTextPrivateKey;
-    
+
     /**
      * Constructor
      * 
@@ -66,48 +66,48 @@ public class JWTRSAPlainTextAuthenticator extends AbstractJWTRSAAuthenticator
      * @param strPlainTextPublicKey
      *            The plain text public key
      */
-    public JWTRSAPlainTextAuthenticator( Map<String, String> mapClaimsToCheck, String strJWTHttpHeader, long lValidityPeriod, String strEncryptionAlgorythmName,
-            String strPlainTextPrivateKey, String strPlainTextPublicKey )
+    public JWTRSAPlainTextAuthenticator( Map<String, String> mapClaimsToCheck, String strJWTHttpHeader, long lValidityPeriod,
+            String strEncryptionAlgorythmName, String strPlainTextPrivateKey, String strPlainTextPublicKey )
     {
         super( mapClaimsToCheck, strJWTHttpHeader, lValidityPeriod, strEncryptionAlgorythmName );
         _strPlainTextPrivateKey = strPlainTextPrivateKey;
         _strPlainTextPublicKey = strPlainTextPublicKey;
-        
+
     }
-    
+
     /**
      * {@inheritDoc }
      */
     @Override
-    protected KeyPair getKeyPair( ) 
+    protected KeyPair getKeyPair( )
     {
         RSAPublicKey pubKey = null;
         PrivateKey privKey = null;
-        try 
+        try
         {
-            KeyFactory kf = KeyFactory.getInstance("RSA");
-            
-            try 
+            KeyFactory kf = KeyFactory.getInstance( "RSA" );
+
+            try
             {
-                X509EncodedKeySpec keySpecX509 = new X509EncodedKeySpec(Base64.getDecoder().decode( _strPlainTextPublicKey ));
+                X509EncodedKeySpec keySpecX509 = new X509EncodedKeySpec( Base64.getDecoder( ).decode( _strPlainTextPublicKey ) );
                 pubKey = (RSAPublicKey) kf.generatePublic( keySpecX509 );
             }
-            catch ( InvalidKeySpecException e )
+            catch( InvalidKeySpecException e )
             {
                 LOGGER.error( "Unable to convert given plain text key to public java.security.Key", e );
             }
 
-            try 
+            try
             {
-                PKCS8EncodedKeySpec keySpecPKCS8 = new PKCS8EncodedKeySpec(Base64.getDecoder().decode( _strPlainTextPrivateKey ) );
-                privKey = kf.generatePrivate(keySpecPKCS8);
+                PKCS8EncodedKeySpec keySpecPKCS8 = new PKCS8EncodedKeySpec( Base64.getDecoder( ).decode( _strPlainTextPrivateKey ) );
+                privKey = kf.generatePrivate( keySpecPKCS8 );
             }
-            catch ( InvalidKeySpecException e )
+            catch( InvalidKeySpecException e )
             {
                 LOGGER.error( "Unable to convert given plain text key to public java.security.Key", e );
             }
         }
-        catch ( NoSuchAlgorithmException e )
+        catch( NoSuchAlgorithmException e )
         {
             LOGGER.error( "Unable to obtain a KeyFactory for RSA", e );
             return null;

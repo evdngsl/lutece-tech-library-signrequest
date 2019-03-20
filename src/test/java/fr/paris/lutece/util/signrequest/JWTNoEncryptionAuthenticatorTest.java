@@ -62,7 +62,7 @@ public class JWTNoEncryptionAuthenticatorTest
         Map<String, String> mapJWTClaims = new HashMap<>( );
         mapJWTClaims.put( CLAIM_KEY, CLAIM_VALUE );
 
-        //Build a request with a JWT in header
+        // Build a request with a JWT in header
         JWTNoEncryptionAuthenticator authenticator = new JWTNoEncryptionAuthenticator( mapJWTClaims, HTTP_HEADER_NAME, VALIDITY );
         request.addMokeHeader( HTTP_HEADER_NAME, JWTUtil.buildBase64JWT( mapJWTClaims, authenticator.getExpirationDate( ), null, null ) );
 

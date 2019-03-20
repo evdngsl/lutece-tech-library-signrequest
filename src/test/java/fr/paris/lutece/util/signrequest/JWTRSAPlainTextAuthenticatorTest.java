@@ -62,6 +62,7 @@ public class JWTRSAPlainTextAuthenticatorTest
 
     /**
      * Test of isRequestAuthenticated method, of class JWTRSAPlainTextAuthenticatorTest.
+     * 
      * @throws java.security.spec.InvalidKeySpecException
      * @throws java.security.NoSuchAlgorithmException
      */
@@ -74,12 +75,12 @@ public class JWTRSAPlainTextAuthenticatorTest
         mapJWTClaims.put( CLAIM_KEY, CLAIM_VALUE );
 
         JWTRSAPlainTextAuthenticator authenticator = new JWTRSAPlainTextAuthenticator( mapJWTClaims, HTTP_HEADER_NAME, VALIDITY, ALGO, PRIV_KEY, PUB_KEY );
-        
-        KeyFactory kf = KeyFactory.getInstance( "RSA" );
-        PKCS8EncodedKeySpec keySpecPKCS8 = new PKCS8EncodedKeySpec(Base64.getDecoder().decode( PRIV_KEY ) );
-        PrivateKey privKey = kf.generatePrivate(keySpecPKCS8);
 
-        //Build a request with a JWT in header
+        KeyFactory kf = KeyFactory.getInstance( "RSA" );
+        PKCS8EncodedKeySpec keySpecPKCS8 = new PKCS8EncodedKeySpec( Base64.getDecoder( ).decode( PRIV_KEY ) );
+        PrivateKey privKey = kf.generatePrivate( keySpecPKCS8 );
+
+        // Build a request with a JWT in header
         request.addMokeHeader( HTTP_HEADER_NAME, JWTUtil.buildBase64JWT( mapJWTClaims, authenticator.getExpirationDate( ), ALGO, privKey ) );
 
         assertTrue( authenticator.isRequestAuthenticated( request ) );

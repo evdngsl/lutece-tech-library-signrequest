@@ -68,7 +68,7 @@ public class JWTSecretKeyAuthenticatorTest
         JWTSecretKeyAuthenticator authenticator = new JWTSecretKeyAuthenticator( mapJWTClaims, HTTP_HEADER_NAME, VALIDITY, ALGO, SECRET_KEY );
         Key key = JWTUtil.getKey( SECRET_KEY, ALGO );
 
-        //Build a request with a JWT in header
+        // Build a request with a JWT in header
         request.addMokeHeader( HTTP_HEADER_NAME, JWTUtil.buildBase64JWT( mapJWTClaims, authenticator.getExpirationDate( ), ALGO, key ) );
 
         assertTrue( authenticator.isRequestAuthenticated( request ) );

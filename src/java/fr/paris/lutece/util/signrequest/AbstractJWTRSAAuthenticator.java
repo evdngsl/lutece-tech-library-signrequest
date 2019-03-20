@@ -79,7 +79,7 @@ public abstract class AbstractJWTRSAAuthenticator extends AbstractJWTAuthenticat
 
         if ( isAuthenticated )
         {
-            return JWTUtil.checkSignature( request, _strJWTHttpHeader, getKeyPair().getPublic( ) );
+            return JWTUtil.checkSignature( request, _strJWTHttpHeader, getKeyPair( ).getPublic( ) );
         }
         return false;
     }
@@ -91,14 +91,15 @@ public abstract class AbstractJWTRSAAuthenticator extends AbstractJWTAuthenticat
     public void authenticateRequest( HttpMethodBase method, List<String> elements )
     {
         Header header = new Header( _strJWTHttpHeader, JWTUtil.buildBase64JWT( _mapClaimsToCheck, getExpirationDate( ), _strEncryptionAlgorythmName,
-                getKeyPair().getPublic( ) ) );
+                getKeyPair( ).getPublic( ) ) );
         method.setRequestHeader( header );
     }
-    
+
     /**
      * Get the RSA public/private key pair
+     * 
      * @return the RSA public/private key pair
      */
     protected abstract KeyPair getKeyPair( );
-    
+
 }

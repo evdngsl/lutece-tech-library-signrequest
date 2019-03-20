@@ -56,23 +56,22 @@ public class JWTRSAKeyStoreFileAuthenticator extends AbstractJWTRSAAuthenticator
     private final String _strKeystorePassword;
     private final String _strCertificatePassword;
     private final String _strAlias;
-    
-    
-     /**
+
+    /**
      * {@inheritDoc }
      */
     @Override
     public boolean isRequestAuthenticated( HttpServletRequest request )
     {
-        //WARNING
-        // Be careful when your using the KeyStoreFileAuthenticator to sign request. 
-        // This implementation can be used from request inside the same server; because 
-        // its requires the keystore which contains both private and public keys. Do 
-        // not use it if your are client/server request mode, as API calls. See doc 
+        // WARNING
+        // Be careful when your using the KeyStoreFileAuthenticator to sign request.
+        // This implementation can be used from request inside the same server; because
+        // its requires the keystore which contains both private and public keys. Do
+        // not use it if your are client/server request mode, as API calls. See doc
         // for more informations.
         return super.isRequestAuthenticated( request );
     }
-    
+
     /**
      * Constructor
      * 
@@ -93,8 +92,8 @@ public class JWTRSAKeyStoreFileAuthenticator extends AbstractJWTRSAAuthenticator
      * @param strAlias
      *            The alias of the certificate in the keystore
      */
-    public JWTRSAKeyStoreFileAuthenticator( Map<String, String> mapClaimsToCheck, String strJWTHttpHeader, long lValidityPeriod, String strEncryptionAlgorythmName,
-            String strKeystorePath, String strKeystorePassword, String strCertificatePassword, String strAlias )
+    public JWTRSAKeyStoreFileAuthenticator( Map<String, String> mapClaimsToCheck, String strJWTHttpHeader, long lValidityPeriod,
+            String strEncryptionAlgorythmName, String strKeystorePath, String strKeystorePassword, String strCertificatePassword, String strAlias )
     {
         super( mapClaimsToCheck, strJWTHttpHeader, lValidityPeriod, strEncryptionAlgorythmName );
         _strKeystorePath = strKeystorePath;
@@ -102,31 +101,31 @@ public class JWTRSAKeyStoreFileAuthenticator extends AbstractJWTRSAAuthenticator
         _strCertificatePassword = strCertificatePassword;
         _strAlias = strAlias;
     }
-    
+
     /**
      * {@inheritDoc }
      */
     @Override
     protected KeyPair getKeyPair( )
     {
-        try 
+        try
         {
             FileInputStream is = new FileInputStream( _strKeystorePath );
-            KeyStore keystore = KeyStore.getInstance( KeyStore.getDefaultType());
-            keystore.load( is, _strKeystorePassword.toCharArray() );
-            
-            Key key = (PrivateKey) keystore.getKey( _strAlias, _strCertificatePassword.toCharArray());
-            Certificate cert = keystore.getCertificate( _strAlias );
-            PublicKey publicKey = cert.getPublicKey();
+            KeyStore keystore = KeyStore.getInstance( KeyStore.getDefaultType( ) );
+            keystore.load( is, _strKeystorePassword.toCharArray( ) );
 
-            return new KeyPair(publicKey, (PrivateKey) key);
+            Key key = (PrivateKey) keystore.getKey( _strAlias, _strCertificatePassword.toCharArray( ) );
+            Certificate cert = keystore.getCertificate( _strAlias );
+            PublicKey publicKey = cert.getPublicKey( );
+
+            return new KeyPair( publicKey, (PrivateKey) key );
         }
-        
-        catch ( CertificateException | IOException | KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e  ) 
+
+        catch( CertificateException | IOException | KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e )
         {
-            LOGGER.error( "Unable to get key pair from certificate", e);
+            LOGGER.error( "Unable to get key pair from certificate", e );
         }
-        
+
         return null;
     }
 }

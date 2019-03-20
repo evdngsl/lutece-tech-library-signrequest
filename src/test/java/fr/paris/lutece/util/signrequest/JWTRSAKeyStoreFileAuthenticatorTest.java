@@ -61,39 +61,31 @@ public class JWTRSAKeyStoreFileAuthenticatorTest
     private static final String KEYSTORE_PASSWORD = "wso2carbon";
     private static final String CERTIF_PASSWORD = "wso2carbon";
     private static final String ALIAS = "wso2carbon";
-        
+
     /**
      * Test of isRequestAuthenticated method, of class JWTSecretKeyAuthenticator.
+     * 
      * @throws java.security.spec.InvalidKeySpecException
      * @throws java.security.NoSuchAlgorithmException
      */
     @Test
     public void testSignRequestAndTestAuth( ) throws InvalidKeySpecException, NoSuchAlgorithmException, URISyntaxException
     {
-        URL res = getClass().getClassLoader().getResource( KEYSTORE_PATH );
-        File file = Paths.get(res.toURI()).toFile();
-        String absolutePath = file.getAbsolutePath();
-        
+        URL res = getClass( ).getClassLoader( ).getResource( KEYSTORE_PATH );
+        File file = Paths.get( res.toURI( ) ).toFile( );
+        String absolutePath = file.getAbsolutePath( );
+
         MokeHttpServletRequest request = new MokeHttpServletRequest( );
 
         Map<String, String> mapJWTClaims = new HashMap<>( );
         mapJWTClaims.put( CLAIM_KEY, CLAIM_VALUE );
 
-        JWTRSAKeyStoreFileAuthenticator authenticator = new JWTRSAKeyStoreFileAuthenticator( 
-                mapJWTClaims, 
-                HTTP_HEADER_NAME, 
-                VALIDITY, 
-                ALGO, 
-                absolutePath,
-                KEYSTORE_PASSWORD, 
-                CERTIF_PASSWORD,
-                ALIAS );
+        JWTRSAKeyStoreFileAuthenticator authenticator = new JWTRSAKeyStoreFileAuthenticator( mapJWTClaims, HTTP_HEADER_NAME, VALIDITY, ALGO, absolutePath,
+                KEYSTORE_PASSWORD, CERTIF_PASSWORD, ALIAS );
 
-        //Build a request with JWT in header
-        request.addMokeHeader( 
-                HTTP_HEADER_NAME, 
-                JWTUtil.buildBase64JWT( mapJWTClaims, authenticator.getExpirationDate( ), ALGO, authenticator.getKeyPair( ).getPrivate( ) ) 
-        );
+        // Build a request with JWT in header
+        request.addMokeHeader( HTTP_HEADER_NAME,
+                JWTUtil.buildBase64JWT( mapJWTClaims, authenticator.getExpirationDate( ), ALGO, authenticator.getKeyPair( ).getPrivate( ) ) );
 
         assertTrue( authenticator.isRequestAuthenticated( request ) );
         assertTrue( JWTUtil.checkPayloadValues( request, HTTP_HEADER_NAME, mapJWTClaims ) );

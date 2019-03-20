@@ -65,9 +65,10 @@ public class JWTRSATruststoreFileAuthenticatorTest
     private static final String CACERT_PASSWORD = "changeit";
     private static final String ALIAS = "wso2carbon";
     private static final String PRIV_KEY = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAJSn+hXW9Zzz9ORBKIC9Oi6wzM4zhqwHaKW2vZAqjOeLlpUW7zXwyk4tkivwsydPNaWUm+9oDlEAB2lsQJv7jwWNsF7SGx5R03kenC+cf8Nbxlxwa+Tncjo6uruEsK/Vke244KiSCHP8BOuHI+r5CS0x9edFLgesoYlPPFoJxTs5AgMBAAECgYBL/6iiO7hr2mjrvMgZMSSqtCawkLUcA9mjRs6ZArfwtHNymzwGZqj22ONu5WqiASPbGCO0fI09KfegFQDe/fe6wnpirBWtawLoXCZmGrwC+x/3iqbiGJMd7UB3FaZkZOzV5Jhzomc8inSJWMcR+ywiUY37stfVDqR1sJ/jzZ1OdQJBAO8vCa2OVQBJbzjMvk8Sc0KiuVwnyqMYqVty6vYuufe9ILJfhwhYzE82wIa9LYg7UK2bPvKyyehuFfqI5oU5lU8CQQCfG5LA3gp3D1mS7xxztqJ+cm4SPO4R6YzVybAZKqKUvTFSKNV57Kp/LL7WjtUUNr+dY+aYRlKo81Hq61y8tBT3AkAjJyak+2ZCxIg0MONHe8603HWhtbdygQ1jA2DFDdkHMCS+EowmDeb5PXLOWr92ZkFVQpvdz6kdIBDa4YP/0JbBAkBVHLjqd1z9x7ZRBZwgwkg2gBwloXZxGpB+JMARFl+WVYa2vqVD7bhfA56qxAl0IL1sAm7ucl/xhQgDNRiM0YCNAkEAqySTBx2HO9VyzuWWbf7BYTNsxfO80GaRkZGENfqO1QgnhT1FMeK+ox7Kbi+nSaCBoPjNzyrMbU08M6nSnkDEGA==";
-        
+
     /**
      * Test of isRequestAuthenticated method, of class JWTRSATruststoreFileAuthenticatorTest.
+     * 
      * @throws java.security.spec.InvalidKeySpecException
      * @throws java.security.NoSuchAlgorithmException
      */
@@ -76,27 +77,21 @@ public class JWTRSATruststoreFileAuthenticatorTest
     {
         MokeHttpServletRequest request = new MokeHttpServletRequest( );
 
-        URL res = getClass().getClassLoader().getResource( CACERT_PATH );
-        File file = Paths.get( res.toURI( ) ).toFile();
-        String absolutePath = file.getAbsolutePath();
-        
+        URL res = getClass( ).getClassLoader( ).getResource( CACERT_PATH );
+        File file = Paths.get( res.toURI( ) ).toFile( );
+        String absolutePath = file.getAbsolutePath( );
+
         Map<String, String> mapJWTClaims = new HashMap<>( );
         mapJWTClaims.put( CLAIM_KEY, CLAIM_VALUE );
 
-        JWTRSATrustStoreFileAuthenticator authenticator = new JWTRSATrustStoreFileAuthenticator( 
-                mapJWTClaims, 
-                HTTP_HEADER_NAME, 
-                VALIDITY, 
-                ALGO, 
-                absolutePath, 
-                CACERT_PASSWORD, 
-                ALIAS );
-        
-        KeyFactory kf = KeyFactory.getInstance( "RSA" );
-        PKCS8EncodedKeySpec keySpecPKCS8 = new PKCS8EncodedKeySpec(Base64.getDecoder().decode( PRIV_KEY ) );
-        PrivateKey privKey = kf.generatePrivate(keySpecPKCS8);
+        JWTRSATrustStoreFileAuthenticator authenticator = new JWTRSATrustStoreFileAuthenticator( mapJWTClaims, HTTP_HEADER_NAME, VALIDITY, ALGO, absolutePath,
+                CACERT_PASSWORD, ALIAS );
 
-        //Build a request with a JWT in header
+        KeyFactory kf = KeyFactory.getInstance( "RSA" );
+        PKCS8EncodedKeySpec keySpecPKCS8 = new PKCS8EncodedKeySpec( Base64.getDecoder( ).decode( PRIV_KEY ) );
+        PrivateKey privKey = kf.generatePrivate( keySpecPKCS8 );
+
+        // Build a request with a JWT in header
         request.addMokeHeader( HTTP_HEADER_NAME, JWTUtil.buildBase64JWT( mapJWTClaims, authenticator.getExpirationDate( ), ALGO, privKey ) );
 
         assertTrue( authenticator.isRequestAuthenticated( request ) );
