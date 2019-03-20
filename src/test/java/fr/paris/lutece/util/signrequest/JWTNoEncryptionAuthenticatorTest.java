@@ -36,15 +36,13 @@ package fr.paris.lutece.util.signrequest;
 
 import fr.paris.lutece.test.MokeHttpServletRequest;
 import fr.paris.lutece.util.jwt.service.JWTUtil;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.httpclient.Header;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- * BasicAuthorizationAuthenticatorTest
+ * JWTNoEncryptionAuthenticatorTest
  */
 public class JWTNoEncryptionAuthenticatorTest
 {
@@ -64,8 +62,8 @@ public class JWTNoEncryptionAuthenticatorTest
         Map<String, String> mapJWTClaims = new HashMap<>( );
         mapJWTClaims.put( CLAIM_KEY, CLAIM_VALUE );
 
+        //Build a request with a JWT in header
         JWTNoEncryptionAuthenticator authenticator = new JWTNoEncryptionAuthenticator( mapJWTClaims, HTTP_HEADER_NAME, VALIDITY );
-
         request.addMokeHeader( HTTP_HEADER_NAME, JWTUtil.buildBase64JWT( mapJWTClaims, authenticator.getExpirationDate( ), null, null ) );
 
         assertTrue( authenticator.isRequestAuthenticated( request ) );

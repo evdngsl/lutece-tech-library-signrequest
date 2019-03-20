@@ -36,10 +36,9 @@ package fr.paris.lutece.util.signrequest;
 
 import fr.paris.lutece.test.MokeHttpServletRequest;
 import fr.paris.lutece.util.jwt.service.JWTUtil;
-import java.io.IOException;
+import java.security.Key;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.httpclient.Header;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -52,6 +51,7 @@ public class JWTSecretKeyAuthenticatorTest
     private static final String CLAIM_VALUE = "claim_value";
     private static final String HTTP_HEADER_NAME = "header_name";
     private static final String SECRET_KEY = "testestestestest";
+    private static final String ALGO = "HS256";
     private static final long VALIDITY = 60000;
 
     /**
@@ -65,10 +65,11 @@ public class JWTSecretKeyAuthenticatorTest
         Map<String, String> mapJWTClaims = new HashMap<>( );
         mapJWTClaims.put( CLAIM_KEY, CLAIM_VALUE );
 
-        JWTSecretKeyAuthenticator authenticator = new JWTSecretKeyAuthenticator( mapJWTClaims, HTTP_HEADER_NAME, VALIDITY, null, SECRET_KEY );
-        authenticator.setValidityTimePeriod( VALIDITY );
+        JWTSecretKeyAuthenticator authenticator = new JWTSecretKeyAuthenticator( mapJWTClaims, HTTP_HEADER_NAME, VALIDITY, ALGO, SECRET_KEY );
+        Key key = JWTUtil.getKey( SECRET_KEY, ALGO );
 
-        request.addMokeHeader( HTTP_HEADER_NAME, JWTUtil.buildBase64JWT( mapJWTClaims, authenticator.getExpirationDate( ), null, SECRET_KEY ) );
+        //Build a request with a JWT in header
+        request.addMokeHeader( HTTP_HEADER_NAME, JWTUtil.buildBase64JWT( mapJWTClaims, authenticator.getExpirationDate( ), ALGO, key ) );
 
         assertTrue( authenticator.isRequestAuthenticated( request ) );
         assertTrue( JWTUtil.checkPayloadValues( request, HTTP_HEADER_NAME, mapJWTClaims ) );
