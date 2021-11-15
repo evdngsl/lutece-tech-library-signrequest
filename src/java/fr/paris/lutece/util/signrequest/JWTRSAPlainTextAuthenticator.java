@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2018, Mairie de Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -66,8 +66,8 @@ public class JWTRSAPlainTextAuthenticator extends AbstractJWTRSAAuthenticator
      * @param strPlainTextPublicKey
      *            The plain text public key
      */
-    public JWTRSAPlainTextAuthenticator( Map<String, String> mapClaimsToCheck, String strJWTHttpHeader, long lValidityPeriod,
-            String strEncryptionAlgorythmName, String strPlainTextPrivateKey, String strPlainTextPublicKey )
+    public JWTRSAPlainTextAuthenticator( Map<String, String> mapClaimsToCheck, String strJWTHttpHeader, long lValidityPeriod, String strEncryptionAlgorythmName,
+            String strPlainTextPrivateKey, String strPlainTextPublicKey )
     {
         super( mapClaimsToCheck, strJWTHttpHeader, lValidityPeriod, strEncryptionAlgorythmName );
         _strPlainTextPrivateKey = strPlainTextPrivateKey;

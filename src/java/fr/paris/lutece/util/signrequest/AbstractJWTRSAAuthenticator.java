@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2018, Mairie de Paris
+ * Copyright (c) 2002-2021, City of Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -90,8 +90,8 @@ public abstract class AbstractJWTRSAAuthenticator extends AbstractJWTAuthenticat
     @Override
     public void authenticateRequest( HttpMethodBase method, List<String> elements )
     {
-        Header header = new Header( _strJWTHttpHeader, JWTUtil.buildBase64JWT( _mapClaimsToCheck, getExpirationDate( ), _strEncryptionAlgorythmName,
-                getKeyPair( ).getPublic( ) ) );
+        Header header = new Header( _strJWTHttpHeader,
+                JWTUtil.buildBase64JWT( _mapClaimsToCheck, getExpirationDate( ), _strEncryptionAlgorythmName, getKeyPair( ).getPublic( ) ) );
         method.setRequestHeader( header );
     }
 
