@@ -33,13 +33,13 @@
  */
 package fr.paris.lutece.util.signrequest;
 
-import fr.paris.lutece.util.jwt.service.JWTUtil;
 import java.security.KeyPair;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpMethodBase;
+
+import fr.paris.lutece.util.jwt.service.JWTUtil;
 
 public abstract class AbstractJWTRSAAuthenticator extends AbstractJWTAuthenticator
 {
@@ -88,11 +88,10 @@ public abstract class AbstractJWTRSAAuthenticator extends AbstractJWTAuthenticat
      * {@inheritDoc }
      */
     @Override
-    public void authenticateRequest( HttpMethodBase method, List<String> elements )
+    public AuthenticateRequestInformations getSecurityInformations(  List<String> elements )
     {
-        Header header = new Header( _strJWTHttpHeader,
-                JWTUtil.buildBase64JWT( _mapClaimsToCheck, getExpirationDate( ), _strEncryptionAlgorythmName, getKeyPair( ).getPublic( ) ) );
-        method.setRequestHeader( header );
+    	 return new AuthenticateRequestInformations().addSecurityHeader(_strJWTHttpHeader,JWTUtil.buildBase64JWT( _mapClaimsToCheck, getExpirationDate( ), _strEncryptionAlgorythmName, getKeyPair( ).getPublic( )));
+ 
     }
 
     /**

@@ -33,19 +33,23 @@
  */
 package fr.paris.lutece.util.signrequest;
 
-import fr.paris.lutece.util.jwt.service.JWTUtil;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
-import org.apache.log4j.Logger;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import fr.paris.lutece.util.jwt.service.JWTUtil;
 
 /**
  * AbstractAuthenticator
  */
 public abstract class AbstractJWTAuthenticator extends AbstractAuthenticator
 {
-    protected static final Logger LOGGER = Logger.getLogger( "lutece.security.signrequest" );
+    protected static final Logger LOGGER = LogManager.getLogger( "lutece.security.signrequest" );
     protected Map<String, String> _mapClaimsToCheck;
     protected String _strJWTHttpHeader;
 

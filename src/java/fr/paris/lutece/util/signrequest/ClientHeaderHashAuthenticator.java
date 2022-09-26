@@ -33,16 +33,13 @@
  */
 package fr.paris.lutece.util.signrequest;
 
-import fr.paris.lutece.util.signrequest.service.ClientKeyService;
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpMethodBase;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import static fr.paris.lutece.util.signrequest.AbstractAuthenticator.LOGGER;
+
+import fr.paris.lutece.util.signrequest.service.ClientKeyService;
 
 /**
  * Client Header Hash Authenticator
@@ -126,18 +123,14 @@ public class ClientHeaderHashAuthenticator extends AbstractAuthenticator impleme
      * {@inheritDoc }
      */
     @Override
-    public void authenticateRequest( HttpMethodBase method, List<String> elements )
+    public AuthenticateRequestInformations  getSecurityInformations( List<String> elements )
     {
         String strTimestamp = String.valueOf( new Date( ).getTime( ) );
-        Header header = new Header( HEADER_TIMESTAMP, strTimestamp );
-        method.setRequestHeader( header );
-
-        header = new Header( HEADER_CLIENT_ID, _strClientId );
-        method.setRequestHeader( header );
-
         String strClientKey = _clientKeyService.getKey( _strClientId );
         String strSignature = buildSignature( elements, strTimestamp, strClientKey );
-        header = new Header( HEADER_SIGNATURE, strSignature );
-        method.setRequestHeader( header );
+        
+        return new AuthenticateRequestInformations().addSecurityHeader(HEADER_TIMESTAMP, strTimestamp ).addSecurityHeader(HEADER_CLIENT_ID, _strClientId).addSecurityHeader(HEADER_SIGNATURE, strSignature);
+        
+
     }
 }

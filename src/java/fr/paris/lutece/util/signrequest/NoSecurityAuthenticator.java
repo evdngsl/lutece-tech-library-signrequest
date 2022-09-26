@@ -33,8 +33,6 @@
  */
 package fr.paris.lutece.util.signrequest;
 
-import org.apache.commons.httpclient.HttpMethodBase;
-
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -57,8 +55,8 @@ public class NoSecurityAuthenticator implements RequestAuthenticator
      * {@inheritDoc }
      */
     @Override
-    public void authenticateRequest( HttpMethodBase method, List<String> elements )
+    public AuthenticateRequestInformations getSecurityInformations(  List<String> elements )
     {
-        // Do nothing;
+    	return null; 
     }
 }

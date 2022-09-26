@@ -44,7 +44,6 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.httpclient.HttpMethodBase;
 
 public class JWTRSATrustStoreFileAuthenticator extends AbstractJWTRSAAuthenticator
 {
@@ -105,8 +104,9 @@ public class JWTRSATrustStoreFileAuthenticator extends AbstractJWTRSAAuthenticat
      * {@inheritDoc }
      */
     @Override
-    public void authenticateRequest( HttpMethodBase method, List<String> elements )
+    public AuthenticateRequestInformations  getSecurityInformations( List<String> elements )
     {
+    	return null;
         // Do nothing : its not possible to authenticate a request only with a trustore file, because its
         // it only contains public key. Use a JWTCertificateFileAuthenticator if you
         // want to sign request with RSA private key.

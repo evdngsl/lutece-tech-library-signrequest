@@ -33,8 +33,6 @@
  */
 package fr.paris.lutece.util.signrequest;
 
-import org.apache.commons.httpclient.HttpMethodBase;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -95,16 +93,16 @@ public class RequestHashAuthenticator extends AbstractPrivateKeyAuthenticator im
      * {@inheritDoc }
      */
     @Override
-    public void authenticateRequest( HttpMethodBase method, List<String> elements )
+    public AuthenticateRequestInformations  getSecurityInformations( List<String> elements )
     {
-        String strQueryString = method.getQueryString( );
+    	
         String strTimestamp = String.valueOf( new Date( ).getTime( ) );
-        strQueryString += ( "&" + PARAMETER_TIMESTAMP + "=" + strTimestamp );
-
         String strSignature = buildSignature( elements, strTimestamp, getPrivateKey( ) );
-        strQueryString += ( "&" + PARAMETER_SIGNATURE + "=" + strSignature );
-
-        method.setQueryString( strQueryString );
+        
+        return new AuthenticateRequestInformations().addSecurityParameter(PARAMETER_TIMESTAMP,strTimestamp).addSecurityParameter(PARAMETER_SIGNATURE, strSignature);
+        		
+        
+        
     }
 
     /**

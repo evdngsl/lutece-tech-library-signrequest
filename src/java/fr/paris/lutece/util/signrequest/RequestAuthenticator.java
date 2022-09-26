@@ -33,8 +33,6 @@
  */
 package fr.paris.lutece.util.signrequest;
 
-import org.apache.commons.httpclient.HttpMethodBase;
-
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -58,10 +56,10 @@ public interface RequestAuthenticator
     /**
      * Authenticate a request
      * 
-     * @param method
-     *            The HTTP method to authenticate
      * @param elements
      *            List of elements to include in the signature
+     *            
+     * @return AuthenticateRequestInformations      
      */
-    void authenticateRequest( HttpMethodBase method, List<String> elements );
+    AuthenticateRequestInformations getSecurityInformations(  List<String> elements );
 }
