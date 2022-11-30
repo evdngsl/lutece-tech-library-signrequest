@@ -33,8 +33,6 @@
  */
 package fr.paris.lutece.util.signrequest;
 
-import fr.paris.lutece.util.jwt.service.JWTUtil;
-import static fr.paris.lutece.util.signrequest.AbstractJWTAuthenticator.LOGGER;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.Key;
@@ -48,6 +46,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 public class JWTRSAKeyStoreFileAuthenticator extends AbstractJWTRSAAuthenticator

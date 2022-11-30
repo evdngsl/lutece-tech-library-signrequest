@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.util.signrequest;
 
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpMethodBase;
-import org.apache.commons.codec.binary.Base64;
-
+import java.util.Base64;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+
+
 
 /**
  * BasicAuthorizationAuthenticator.<br>
@@ -88,11 +88,12 @@ public class BasicAuthorizationAuthenticator extends AbstractAuthenticator
      * {@inheritDoc }
      */
     @Override
-    public void authenticateRequest( HttpMethodBase method, List<String> elements )
+    public AuthenticateRequestInformations  getSecurityInformations( List<String> elements )
     {
         String strHeader = BASIC_AUTHORIZATION_PREFIX + getDigest( );
-        Header header = new Header( HEADER_AUTHORIZATION, strHeader );
-        method.setRequestHeader( header );
+        
+        return new AuthenticateRequestInformations().addSecurityHeader(HEADER_AUTHORIZATION, strHeader );  
+      
     }
 
     /**
@@ -103,7 +104,7 @@ public class BasicAuthorizationAuthenticator extends AbstractAuthenticator
     private String getDigest( )
     {
         String strSecret = _strUsername + ':' + _strPassword;
-        byte [ ] encodedBytes = Base64.encodeBase64( strSecret.getBytes( ) );
+        byte [ ] encodedBytes = Base64.getEncoder().encode( strSecret.getBytes() );
 
         return new String( encodedBytes );
     }

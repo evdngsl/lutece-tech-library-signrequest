@@ -33,19 +33,20 @@
  */
 package fr.paris.lutece.util.signrequest;
 
-import fr.paris.lutece.util.signrequest.security.HashService;
-
-import org.apache.log4j.Logger;
-
 import java.util.Date;
 import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import fr.paris.lutece.util.signrequest.security.HashService;
 
 /**
  * AbstractAuthenticator
  */
 public abstract class AbstractAuthenticator implements RequestAuthenticator
 {
-    protected static final Logger LOGGER = Logger.getLogger( "lutece.security.signrequest" );
+    protected static final Logger LOGGER = LogManager.getLogger( "lutece.security.signrequest" );
     private static HashService _serviceHash;
     private List<String> _listSignatureElements;
     protected long _lValidityTimePeriod;

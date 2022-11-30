@@ -33,12 +33,12 @@
  */
 package fr.paris.lutece.util.signrequest.security;
 
-import org.apache.log4j.Logger;
-
 import java.io.UnsupportedEncodingException;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Sha1HashService
@@ -46,7 +46,7 @@ import java.security.NoSuchAlgorithmException;
 public class Sha1HashService implements HashService
 {
     private static final String HEX_DIGITS = "0123456789abcdef";
-    private static Logger _logger = Logger.getLogger( "lutece.security.signrequest" );
+    private static Logger _logger = LogManager.getLogger(  "lutece.security.signrequest" );
 
     /**
      * {@inheritDoc }

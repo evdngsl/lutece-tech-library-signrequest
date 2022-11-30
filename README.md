@@ -1,11 +1,15 @@
+![](https://dev.lutece.paris.fr/jenkins/buildStatus/icon?job=tech-library-signrequest-deploy)
+[![Alerte](https://dev.lutece.paris.fr/sonar/api/project_badges/measure?project=fr.paris.lutece.plugins%3Alibrary-signrequest&metric=alert_status)](https://dev.lutece.paris.fr/sonar/dashboard?id=fr.paris.lutece.plugins%3Alibrary-signrequest)
+[![Line of code](https://dev.lutece.paris.fr/sonar/api/project_badges/measure?project=fr.paris.lutece.plugins%3Alibrary-signrequest&metric=ncloc)](https://dev.lutece.paris.fr/sonar/dashboard?id=fr.paris.lutece.plugins%3Alibrary-signrequest)
+[![Coverage](https://dev.lutece.paris.fr/sonar/api/project_badges/measure?project=fr.paris.lutece.plugins%3Alibrary-signrequest&metric=coverage)](https://dev.lutece.paris.fr/sonar/dashboard?id=fr.paris.lutece.plugins%3Alibrary-signrequest)
 
-#Library SignRequest
+# Library SignRequest
 
-##Introduction
+## Introduction
 
 The purpose of this library is to provide a number of tools and interfaces to send HTTP requests with digital signatures to ensurea certain level of security.
 
-##Sécurité provided by a signature
+## Security provided by a signature
 
 The security provided by a signature associated OF a HTTP request is very useful in the context of REST webservice where there is no concept of session (stateless mode - without state).
 
@@ -33,9 +37,9 @@ In summary, the security offered by the signature mechanism corresponds to opera
 
 To ensure data privacy, data transfer must be achieved by HTTPS.
 
-#Tools provided by SignRequest
+# Tools provided by SignRequest
 
-##API RequestAuthenticator
+## API RequestAuthenticator
 
 API `RequestAuthenticator` : defines a Authenticator HTTP request.
 
@@ -52,11 +56,10 @@ The same component can be used client side to sign a petition and server side to
                             boolean  ** isRequestAuthenticated **  (HttpServletRequest request);
 
                             / **
-                            * Authenticate a request
-                            * @ Param method The HTTP method to authenticate
+                            * return Security informations to put in the request headers and request parameters
                             * @ Param elements List of elements to include in the signature
                             * /
-                             ** AuthenticateRequest void **  (HttpMethodBase method, <String> List elements);
+                            AuthenticateRequestInformations   ** getSecurityInformations **  ( List elements);
                         
                         
 ```
@@ -71,7 +74,7 @@ This interface offers many implementations. A good practice is to inject a Sprin
 * RequestHashAuthenticator: Signature spent in a header of the HTTP request
 
 
-##RequestHashAuthenticator and HeaderHashAuthenticator
+## RequestHashAuthenticator and HeaderHashAuthenticator
 
 These authenticators must be configured using several parameters:
 
@@ -87,7 +90,7 @@ Securing all requests can be made at the REST plugin by injecting a Spring conte
 
 By default the plugin uses REST implementation `NoSecurityRequestAuthenticator` which allows all queries. The example below shows a configuration HeaderHashRequestAuthenticator using the setup and specific.
 <bean id="rest.hashService" class="fr.paris.lutece.util.signrequest.security.Sha1HashService" /><bean id="rest.requestAuthenticator" class="fr.paris.lutece.util.signrequest.HeaderHashAuthenticator"><property name="hashService" ref="rest.hashService" /><property name="signatureElements"><list><value>key</value></list></property><property name="privateKey"><value>change me</value></property><property name="validityTimePeriod"><value>0</value></property></bean>
-#API HashService
+# API HashService
 
 Cette API propose une fonction de hachage
 
@@ -109,7 +112,7 @@ Voici l'interface
 
 The library offers SignRequest implementing SHA-1.
 
-#Servlet Filters
+# Servlet Filters
 
 The library also offers SignRequest Servlet filters that can be used by plugins in order to validatequeries on the server side.They are based on authenticators provided with the library.An example of a filter added to the XML file of a plugin:
 
@@ -143,7 +146,7 @@ The library also offers SignRequest Servlet filters that can be used by plugins 
 
 
 
-[Maven documentation and reports](http://dev.lutece.paris.fr/plugins/library-signrequest/)
+[Maven documentation and reports](https://dev.lutece.paris.fr/plugins/library-signrequest/)
 
 
 

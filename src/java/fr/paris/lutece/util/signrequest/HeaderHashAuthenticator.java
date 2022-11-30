@@ -33,9 +33,6 @@
  */
 package fr.paris.lutece.util.signrequest;
 
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpMethodBase;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -95,14 +92,12 @@ public class HeaderHashAuthenticator extends AbstractPrivateKeyAuthenticator imp
      * {@inheritDoc }
      */
     @Override
-    public void authenticateRequest( HttpMethodBase method, List<String> elements )
+    public AuthenticateRequestInformations  getSecurityInformations( List<String> elements )
     {
         String strTimestamp = String.valueOf( new Date( ).getTime( ) );
-        Header header = new Header( HEADER_TIMESTAMP, strTimestamp );
-        method.setRequestHeader( header );
-
         String strSignature = buildSignature( elements, strTimestamp, getPrivateKey( ) );
-        header = new Header( HEADER_SIGNATURE, strSignature );
-        method.setRequestHeader( header );
+
+        return new AuthenticateRequestInformations().addSecurityHeader(HEADER_TIMESTAMP,strTimestamp).addSecurityHeader(HEADER_SIGNATURE, strSignature);
+        
     }
 }
