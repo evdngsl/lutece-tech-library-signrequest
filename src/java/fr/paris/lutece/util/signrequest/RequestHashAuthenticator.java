@@ -136,20 +136,5 @@ public class RequestHashAuthenticator extends AbstractPrivateKeyAuthenticator im
         return sbExtrasParameters.toString( );
     }
 
-    /**
-     * Add security parameters to a parameter map
-     * 
-     * @param mapParameters
-     *            The parameter map
-     * @param listElements
-     *            The element list to build the signature
-     */
-    public void addSecurityParameters( Map mapParameters, List<String> listElements )
-    {
-        String strTimestamp = String.valueOf( new Date( ).getTime( ) );
-        mapParameters.put( PARAMETER_TIMESTAMP, strTimestamp );
-
-        String strSignature = buildSignature( listElements, strTimestamp, getPrivateKey( ) );
-        mapParameters.put( PARAMETER_SIGNATURE, strSignature );
-    }
+  
 }

@@ -99,11 +99,10 @@
                             boolean <strong> isRequestAuthenticated </strong> (HttpServletRequest request);
 
                             / **
-                            * Authenticate a request
-                            * @ Param method The HTTP method to authenticate
+                            * return Security informations to put in the request headers and request parameters
                             * @ Param elements List of elements to include in the signature
                             * /
-                            <strong> AuthenticateRequest void </strong> (HttpMethodBase method, &lt;String&gt; List elements);
+                            AuthenticateRequestInformations  <strong> getSecurityInformations </strong> ( List elements);
                         
                         </pre> 
                     </div> 

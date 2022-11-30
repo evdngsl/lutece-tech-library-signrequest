@@ -54,7 +54,7 @@ public interface RequestAuthenticator
     boolean isRequestAuthenticated( HttpServletRequest request );
 
     /**
-     * Authenticate a request
+     * return Security informations to put in the request headers and request parameters
      * 
      * @param elements
      *            List of elements to include in the signature
